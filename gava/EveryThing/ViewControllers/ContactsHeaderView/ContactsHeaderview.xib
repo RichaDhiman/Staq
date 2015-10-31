@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ContactsHeaderView">
+            <rect key="frame" x="0.0" y="0.0" width="601" height="70"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aTV-wJ-qA1">
+                    <rect key="frame" x="15" y="20" width="50" height="50"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="Fax-vV-4aQ"/>
+                        <constraint firstAttribute="width" constant="50" id="g8P-rN-7mO"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ilc-p4-vBF">
+                    <rect key="frame" x="73" y="29" width="461" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="33" id="3kR-1K-KFK"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="20"/>
+                    <color key="textColor" red="0.1764705882352941" green="0.1764705882352941" blue="0.1764705882352941" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="khs-L7-ymo">
+                    <rect key="frame" x="573" y="35" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="T0p-h9-aio"/>
+                        <constraint firstAttribute="width" constant="20" id="viS-tI-CZ6"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" image="ic_add_circle_outline">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9FS-Zb-9vk">
+                    <rect key="frame" x="20" y="0.0" width="581" height="2"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="2" id="lSK-Th-w52"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ALL" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfp-Nj-Laz">
+                    <rect key="frame" x="542" y="35" width="25" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="25" id="Jsx-m7-s5x"/>
+                        <constraint firstAttribute="height" constant="21" id="UPo-pu-2pJ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="11"/>
+                    <color key="textColor" red="0.29411764705882354" green="0.29411764705882354" blue="0.29411764705882354" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYF-Zk-XVS">
+                    <rect key="frame" x="20" y="25" width="40" height="40"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W6H-FY-QlM">
+                    <rect key="frame" x="490" y="6" width="111" height="58"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="58" id="EUd-fK-HQ5"/>
+                        <constraint firstAttribute="width" constant="111" id="Pq0-sa-Nnj"/>
+                    </constraints>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btn_AllOption_pressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="1u7-9h-66C"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="khs-L7-ymo" secondAttribute="trailing" constant="8" id="4EH-r5-DjK"/>
+                <constraint firstItem="yfp-Nj-Laz" firstAttribute="centerY" secondItem="khs-L7-ymo" secondAttribute="centerY" id="58l-h5-4Am"/>
+                <constraint firstAttribute="centerY" secondItem="W6H-FY-QlM" secondAttribute="centerY" id="5ay-Ov-r82"/>
+                <constraint firstItem="Ilc-p4-vBF" firstAttribute="leading" secondItem="aTV-wJ-qA1" secondAttribute="trailing" constant="8" id="EEn-07-B8A"/>
+                <constraint firstAttribute="trailing" secondItem="9FS-Zb-9vk" secondAttribute="trailing" id="L5n-wp-KGs"/>
+                <constraint firstAttribute="centerY" secondItem="Ilc-p4-vBF" secondAttribute="centerY" constant="-10" id="Puv-LZ-xd9"/>
+                <constraint firstAttribute="centerY" secondItem="khs-L7-ymo" secondAttribute="centerY" constant="-10" id="RFd-gV-dbB"/>
+                <constraint firstItem="9FS-Zb-9vk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="V9p-Oe-6CR"/>
+                <constraint firstItem="bYF-Zk-XVS" firstAttribute="bottom" secondItem="aTV-wJ-qA1" secondAttribute="bottom" constant="-5" id="Y7J-lg-Z3S"/>
+                <constraint firstItem="bYF-Zk-XVS" firstAttribute="leading" secondItem="aTV-wJ-qA1" secondAttribute="leading" constant="5" id="cpq-j9-SnT"/>
+                <constraint firstAttribute="trailing" secondItem="W6H-FY-QlM" secondAttribute="trailing" id="eV5-f0-aai"/>
+                <constraint firstItem="khs-L7-ymo" firstAttribute="leading" secondItem="yfp-Nj-Laz" secondAttribute="trailing" constant="6" id="hZv-45-sWg"/>
+                <constraint firstItem="aTV-wJ-qA1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="jSa-xV-4Js"/>
+                <constraint firstItem="bYF-Zk-XVS" firstAttribute="top" secondItem="aTV-wJ-qA1" secondAttribute="top" constant="5" id="jyF-Us-d3U"/>
+                <constraint firstAttribute="centerY" secondItem="aTV-wJ-qA1" secondAttribute="centerY" constant="-10" id="kdG-Gv-SDH"/>
+                <constraint firstItem="bYF-Zk-XVS" firstAttribute="trailing" secondItem="aTV-wJ-qA1" secondAttribute="trailing" constant="-5" id="oqR-vt-4VH"/>
+                <constraint firstItem="9FS-Zb-9vk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="rRP-2W-aLP"/>
+                <constraint firstItem="yfp-Nj-Laz" firstAttribute="leading" secondItem="Ilc-p4-vBF" secondAttribute="trailing" constant="8" id="tLB-F2-yif"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="btn_AllOption" destination="W6H-FY-QlM" id="WtW-97-kor"/>
+                <outlet property="btn_iconImg" destination="khs-L7-ymo" id="4lh-bs-aka"/>
+                <outlet property="img_userPic" destination="aTV-wJ-qA1" id="GWz-N3-oKU"/>
+                <outlet property="lbl_ifNoPIc" destination="bYF-Zk-XVS" id="Wec-Ve-p7k"/>
+                <outlet property="lbl_user_name" destination="Ilc-p4-vBF" id="THS-lq-Xhi"/>
+            </connections>
+            <point key="canvasLocation" x="341.5" y="86"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_add_circle_outline" width="24" height="24"/>
+    </resources>
+</document>

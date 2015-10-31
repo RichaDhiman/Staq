@@ -1,0 +1,1 @@
+../../../Cocoa-Touch-Barcodes/NKDBarcodeOffscreenView.h

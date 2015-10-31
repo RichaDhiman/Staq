@@ -1,0 +1,1 @@
+../../../Cocoa-Touch-Barcodes/NKDEAN13Barcode.h
