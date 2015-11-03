@@ -78,9 +78,7 @@
     [self.view endEditing:YES];
     AlertView *alert1=[[AlertView alloc]init];
     if ([[self ValidateCodeInfo]length]==0) {
-        
-        //        UIAlertView *alert2=[[UIAlertView alloc]initWithTitle:@"" message:@"" delegate:self cancelButtonTitle:@"NO,thanks" otherButtonTitles:@"OK", nil];
-        
+    
         [self SyncCard];
     }
     else
@@ -92,13 +90,13 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField;
 {
-    [self accessaryForDone];
+    //[self accessaryForDone];
 }
 
 -(void)SyncCard
 {
+    [self.tf_code resignFirstResponder];
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AlertView *alert=[[AlertView alloc]init];
     UserProfile *ud=[[UserProfile alloc]init];
@@ -135,7 +133,7 @@
 //                 [alert show];
              
              
-             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Family Share Activated" message:[NSString stringWithFormat:@"Wish to sync your gift cards back with %@ ?",self.otherName] delegate:self cancelButtonTitle:@"No, thanks" otherButtonTitles:@"YES", nil];
+             UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Family Share Activated" message:[NSString stringWithFormat:@"Wish to sync your gift cards back with %@?",self.otherName] delegate:self cancelButtonTitle:@"No, thanks" otherButtonTitles:@"YES", nil];
              alert.tag=5;
              [alert show];
 
@@ -166,7 +164,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField==self.tf_code) {
-        [self resignFirstResponder];
+        [self.tf_code resignFirstResponder];
         [self.view endEditing:YES];
         AlertView *alert1=[[AlertView alloc]init];
         if ([[self ValidateCodeInfo]length]==0) {
@@ -189,12 +187,17 @@
         if (buttonIndex==0) {
             
               [self performSegueWithIdentifier:@"show_MainViewController" sender:self];
+            [[NSUserDefaults standardUserDefaults] setValue:@"1" forKey:@"cmgFromSyncScreen"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
          
         }
         else
         {
             //Apihit
             [self SyncBack];
+            [[NSUserDefaults standardUserDefaults] setValue:@"1" forKey:@"cmgFromSyncScreen"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+
         }
         
     }
@@ -218,8 +221,7 @@
 
 -(void)SyncBack
 {
-    [self.view endEditing:YES];
-    [self resignFirstResponder];
+ 
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AlertView *alert=[[AlertView alloc]init];
     UserProfile *ud=[[UserProfile alloc]init];
@@ -244,6 +246,8 @@
              UIAlertView *alert1=[[UIAlertView alloc]initWithTitle:@"" message:@"Token expired! Please login." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
              alert1.tag=2;
              [alert1 show];
+             
+    
          }
          else
          {

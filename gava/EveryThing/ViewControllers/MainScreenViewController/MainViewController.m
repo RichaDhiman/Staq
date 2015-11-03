@@ -19,8 +19,13 @@
 @property(nonatomic,retain)NSString* PlacesNames;
 @property(nonatomic,retain)NSString* PlacesTypes;
 @property(nonatomic,retain)UIPanGestureRecognizer *panGestureRecognizer;
-@property(nonatomic,retain)NSArray* filteredPlacesNames;
-@property(nonatomic,retain)NSArray* filteredPlacesTypes;
+@property(nonatomic,retain)NSMutableArray* filteredPlacesNames;
+@property(nonatomic,retain)NSMutableArray* filteredPlacesTypes;
+@property(nonatomic,retain)NSMutableArray *Names;
+
+
+
+
 @end
 
 @implementation MainViewController
@@ -132,6 +137,22 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    self.img_backimg.alpha=0.0;
+    self.img_backimg.hidden=YES;
+    self.img_backimg.userInteractionEnabled=NO;
+    self.view_sidePanel.hidden=YES;
+    self.view_sidePanel.transform=CGAffineTransformMakeTranslation(-self.view_sidePanel.frame.size.width, 0.0);
+
+    if ([[[ NSUserDefaults standardUserDefaults]valueForKey:@"cmgFromSyncScreen"]isEqualToString:@"1"])
+    {
+        UIAlertView *alert4=[[UIAlertView alloc]initWithTitle:@"" message:@"Gift Cards Shared" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        alert4.tag=4;
+        [alert4 show];
+    }
+    
+    
+    
     
     for(UIView *subView in self.searchBar.subviews){
         if([subView isKindOfClass:UITextField.class]){
@@ -251,6 +272,10 @@
         [alert showStaticAlertWithTitle:@"" AndMessage:@"Please check your Internet Connection!"];
     }];
 }
+
+
+
+
 /*!
  *  @brief  Function to fetch Cards
  */
@@ -259,53 +284,68 @@
     self.MyCards=[CardDetails getCardsInfo];
     self.FilteredCards=[[CardDetails getCardsInfo] mutableCopy];
     
-    NSMutableArray *arr=[[NSMutableArray alloc]init];
-    NSMutableArray *arr2=[[NSMutableArray alloc]init];
+    self.filteredPlacesNames=[[NSMutableArray alloc]init];
+    self.Names=[[NSMutableArray alloc]init];
+    self.filteredPlacesTypes=[[NSMutableArray alloc]init];
+    
     for (CardDetails *temp in self.MyCards)
     {
-        //NSRange whiteSpaceRange = [temp.brandDet.bDet_name rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
-       if ([temp.brandDet.bDet_name rangeOfString:@"\""].location != NSNotFound)
-        {
-            NSString *str=[[NSString alloc]init];
-            str = [temp.brandDet.bDet_name stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        if ([self.Names containsObject:temp.brandDet.bDet_name]) {
             
-//            if (whiteSpaceRange.location != NSNotFound) {
-                [arr addObject:[NSString stringWithFormat:@"\"%@\"",str]];
-//            }
         }
-//       else if (whiteSpaceRange.location != NSNotFound) {
-//            [arr addObject:[NSString stringWithFormat:@"\"%@\"",temp.brandDet.bDet_name]];
-//            
-//        }
         else
         {
-//            [arr addObject:temp.brandDet.bDet_name];
-            [arr addObject:[NSString stringWithFormat:@"\"%@\"",temp.brandDet.bDet_name]];
+            if ([temp.brandDet.bDet_name rangeOfString:@"\""].location != NSNotFound)
+            {
+                NSString *str=[[NSString alloc]init];
+                str = [temp.brandDet.bDet_name stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                
+                [self.filteredPlacesNames addObject:[NSString stringWithFormat:@"\"%@\"",str]];
+                [self.Names addObject:temp.brandDet.bDet_name];
+            }
+            else
+            {
+                [self.filteredPlacesNames addObject:[NSString stringWithFormat:@"\"%@\"",temp.brandDet.bDet_name]];
+                 [self.Names addObject:temp.brandDet.bDet_name];
+            }
+            [self.filteredPlacesTypes addObject:temp.brandDet.bDet_brand_type];
+
         }
-        [arr2 addObject:temp.brandDet.bDet_brand_type];
+        
     }
     
-    self.filteredPlacesNames = [[NSArray alloc] init];
-    NSSet *set= (NSSet*)[NSOrderedSet orderedSetWithArray:arr];
-    self.filteredPlacesNames = [set allObjects];
+//    self.UnsortedplacesNames=[[NSArray alloc]init];
+//    self.UnsortedplacesNames=arr;
+//    
+//    self.filteredPlacesNames = [[NSMutableArray alloc] init];
+//    NSSet *set= (NSSet*)[NSOrderedSet orderedSetWithArray:arr];
+//    self.filteredPlacesNames = [[set allObjects] mutableCopy];
+//    
+//    self.UnsortedplacesTypes=[[NSMutableArray alloc]init];
+//    self.UnsortedplacesTypes=arr2;
+//    
+//    self.filteredPlacesTypes= [[NSMutableArray alloc] init];
+//    NSSet *set2= (NSSet*)[NSOrderedSet orderedSetWithArray:arr2];
+//    self.filteredPlacesTypes = [[set2 allObjects] mutableCopy];
+//    
+
+//    self.PlacesNames=[[NSString alloc]init];
+//    self.PlacesNames=[NSString stringWithFormat:@"%@", [self.filteredPlacesNames componentsJoinedByString:@ "|"]] ;
     
-     self.filteredPlacesTypes= [[NSArray alloc] init];
-    NSSet *set2= (NSSet*)[NSOrderedSet orderedSetWithArray:arr2];
-    self.filteredPlacesTypes = [set2 allObjects];
+//    self.PlacesTypes=[[NSString alloc]init];
+//    self.PlacesTypes=[NSString stringWithFormat:@"%@",[self.filteredPlacesTypes componentsJoinedByString:@"|"]];
     
-    self.PlacesNames=[[NSString alloc]init];
-    self.PlacesNames=[NSString stringWithFormat:@"%@", [self.filteredPlacesNames componentsJoinedByString:@ "|"]] ;
     
-    self.PlacesTypes=[[NSString alloc]init];
-    self.PlacesTypes=[NSString stringWithFormat:@"%@",[self.filteredPlacesTypes componentsJoinedByString:@"|"]];
     
     self.lbl_cards_count.text=[NSString stringWithFormat:@"%lu",(unsigned long)self.MyCards.count ];
-    
     [[NSUserDefaults standardUserDefaults]setValue:self.lbl_cards_count.text forKey:@"NoOfCards"];
     [[NSUserDefaults standardUserDefaults]synchronize];
     
-    self.lbl_total.text=[[NSUserDefaults standardUserDefaults]valueForKey:@"total"];
-    [self.mycollectionView reloadData];
+        self.lbl_total.text=[[NSUserDefaults standardUserDefaults]valueForKey:@"total"];
+    //[self.mycollectionView reloadData];
+    [self.mycollectionView performSelectorOnMainThread:@selector(reloadData)
+                                     withObject:nil
+                                  waitUntilDone:NO];
 
 }
 
@@ -344,8 +384,10 @@
              [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"PlacesTypes"];
              [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"result"];
              [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"users"];
+             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"PlacesNames"];
+             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"PlacesTypes"];
 
-             [[NSUserDefaults standardUserDefaults]synchronize];
+             
              
             ///////facebook token clearance
              [[FBSDKLoginManager new] logOut];
@@ -465,14 +507,14 @@
     FullScreenMapViewController *controller=[mainStoryboard instantiateViewControllerWithIdentifier:@"FullScreenMapViewController"];
 //    controller.cardDet=self.cdet;
     controller.cmngFromMainViewController=YES;
-    controller.BrandNames=self.PlacesNames;
-    controller.BrandTypes=self.PlacesTypes;
+//    controller.BrandNames=self.PlacesNames;
+//    controller.BrandTypes=self.PlacesTypes;
     controller.NamesArrayFromMain=self.filteredPlacesNames;
     controller.TypesArrayFromMain=self.filteredPlacesTypes;
     
     
-    [[NSUserDefaults standardUserDefaults]setValue:self.PlacesNames forKey:@"PlacesNames"];
-    [[NSUserDefaults standardUserDefaults]setValue:self.PlacesTypes forKey:@"PlacesTypes"];
+    [[NSUserDefaults standardUserDefaults]setValue:self.filteredPlacesNames forKey:@"PlacesNames"];
+    [[NSUserDefaults standardUserDefaults]setValue:self.filteredPlacesTypes forKey:@"PlacesTypes"];
         [[NSUserDefaults standardUserDefaults]synchronize];
 
     [self.navigationController pushViewController:controller animated:YES];
@@ -611,7 +653,11 @@
     NSString* filter = @"%K CONTAINS[cd] %@";
     NSPredicate* predicate = [NSPredicate predicateWithFormat:filter, @"brandDet.bDet_name", searchText];
     self.MyCards = [[self.FilteredCards filteredArrayUsingPredicate:predicate] mutableCopy];
-    [self.mycollectionView reloadData];
+    //[self.mycollectionView reloadData];
+    [self.mycollectionView performSelectorOnMainThread:@selector(reloadData)
+                                     withObject:nil
+                                  waitUntilDone:NO];
+    
     self.lbl_NoResult.hidden=(self.MyCards.count==0)?NO:YES;
 }
 
@@ -650,6 +696,13 @@
         if (buttonIndex==0)
         {
             [self MoveToRootView];
+        }
+    }
+    else if (alertView.tag==4)
+    {
+        if (buttonIndex==0) {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"cmgFromSyncScreen"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
         }
     }
     else

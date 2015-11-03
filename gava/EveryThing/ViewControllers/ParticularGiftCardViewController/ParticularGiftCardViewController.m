@@ -454,7 +454,7 @@
 
 {
     self.img_refresh.hidden=NO;
-    
+    [self.tf_price resignFirstResponder];
     self.alreadyRefreshing=YES;
       // AppDelegate*App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     //  [App StartAnimating];
@@ -496,7 +496,7 @@
          if ([[responseStr valueForKey:@"success"] integerValue]==1)
          {
             [CardDetails saveCardsInfo:[responseStr valueForKey:@"cards"]];
-            self.tf_price.userInteractionEnabled=NO;
+            //self.tf_price.userInteractionEnabled=NO;
              self.alreadyRefreshing=NO;
              
            //  if (![[self.tf_price.text substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"$"])
@@ -511,6 +511,14 @@
              UIAlertView *alert1=[[UIAlertView alloc]initWithTitle:@"" message:@"Token expired! Please login." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
              alert1.tag=2;
              [alert1 show];
+         }
+         else
+         {
+//             UIAlertView *alert7=[[UIAlertView alloc]initWithTitle:@"" message:[responseStr valueForKey:@"msg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//             alert7.tag=7;
+//             [alert7 show];
+             
+             [alert showStaticAlertWithTitle:@"" AndMessage:[responseStr valueForKey:@"msg"]];
          }
          
      }
@@ -701,7 +709,7 @@
 
     
     
-     NSString *url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=AIzaSyBY5AWF0BwMMD_oxmm1KHSvEZkAuQLAx0Q&keyword=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],str ,self.cdet.brandDet.bDet_brand_type,@"distance"];
+     NSString *url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=%@&name=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],ApiKey,str ,self.cdet.brandDet.bDet_brand_type,@"distance"];
 
     
     [IOSRequest fetchJsonData:url success:^(NSDictionary *responseDict)
@@ -871,6 +879,12 @@
         if (buttonIndex==0)
         {
             [self.tf_price becomeFirstResponder];
+        }
+    }
+    else if(alertView.tag==7)
+    {
+        if (buttonIndex==0) {
+            [self.navigationController popViewControllerAnimated:YES];
         }
     }
 }

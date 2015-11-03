@@ -141,21 +141,43 @@
         self.lbl_verify.hidden=NO;
         self.view.userInteractionEnabled=NO;
         
-        NSString *str=[[NSString alloc]init];
-        str=[self.tf_remainingBal.text stringByReplacingOccurrencesOfString:@"," withString:@"."];
+       
         
         if (self.is_OtherBrand==YES) {
             
+            NSString *str=[[NSString alloc]init];
+            str=[self.tf_remainingBal.text stringByReplacingOccurrencesOfString:@"," withString:@"."];
             
-            dict=[[NSDictionary alloc]initWithObjectsAndKeys:[self.tf_brandName.text capitalizedString],@"name",[self.tf_cardNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"card_number",ud.user_access_token,@"access_token",[self.tf_pinNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"pin",[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"balance",nil];
+            NSString *str5=[[NSString alloc]init];
+            
+            if ([[str substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"$"]) {
+                str5=[str substringFromIndex:1];
+            }
+            
+            
+            dict=[[NSDictionary alloc]initWithObjectsAndKeys:[self.tf_brandName.text capitalizedString],@"name",[self.tf_cardNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"card_number",ud.user_access_token,@"access_token",[self.tf_pinNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"pin",[str5 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"balance",nil];
+            
             
         }
        else if ([self.BrandName isEqualToString:@"Target"]) {
             
              dict=[[NSDictionary alloc]initWithObjectsAndKeys:self.Brandid,@"brand_id",[self.tf_cardNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"card_number",ud.user_access_token,@"access_token",[self.tf_pinNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"pin",[self.tf_remainingBal.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"event_number",nil];
+           
         }
         else{
-            dict=[[NSDictionary alloc]initWithObjectsAndKeys:self.Brandid,@"brand_id",[self.tf_cardNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"card_number",ud.user_access_token,@"access_token",[self.tf_pinNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"pin",[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"balance",nil];
+               NSString *str5=[[NSString alloc]init];
+            if (self.tf_remainingBal.text.length!=0) {
+                NSString *str=[[NSString alloc]init];
+
+                str=[self.tf_remainingBal.text stringByReplacingOccurrencesOfString:@"," withString:@"."];
+                if ([[str substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"$"]) {
+                    str5=[str substringFromIndex:1];
+                }
+
+            }
+            
+            dict=[[NSDictionary alloc]initWithObjectsAndKeys:self.Brandid,@"brand_id",[self.tf_cardNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"card_number",ud.user_access_token,@"access_token",[self.tf_pinNumber.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"pin",[str5 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],@"balance",nil];
+            
 
         }
         
@@ -334,6 +356,7 @@
         }
         else{
             [self accessaryForDone];
+            [self.tf_remainingBal setText:@"$"];
         }
 
     }
@@ -343,7 +366,15 @@
             [self accessaryForNext];
         }
         else{
-            [self accessaryForDone];
+            if ([self.BrandName isEqualToString:@"Target"]) {
+                      [self accessaryForDone];
+            }
+            else
+            {
+                [self.tf_remainingBal setText:@"$"];
+                [self accessaryForDone];
+            }
+     
         }
         
         }
@@ -364,6 +395,29 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     self.activeField=nil;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    //if ((textField.text.length == 1 && [string isEqualToString:@""])||(textField.text.length>=11))
+    
+    if (self.activeField==self.tf_remainingBal && ![self.BrandName isEqualToString:@"Target"]) {
+        if (textField.text.length == 1 && [string isEqualToString:@""]){
+            //When detect backspace when have one character.
+            return NO;
+        }
+        
+        else
+        {
+            return YES;
+        }
+ 
+    }
+    else
+    {
+        return YES;
+    }
+    
 }
 
 #pragma mark-Button Actions

@@ -19,7 +19,7 @@
 #define server @"http://54.149.202.171/apiv1/"
 #define Url_pics @"http://54.149.202.171/apiv1/photos/thumb/"
 
-
+#define ApiKey @"AIzaSyD3CGQNumujn0doCHNCLO4nyU8rxpHmjL4"
 
 ////  api
 #define Url_Login [NSString stringWithFormat:@"%@%@",server,@"login"]

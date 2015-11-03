@@ -20,6 +20,8 @@
 
 @interface FullScreenMapViewController : UIViewController<MKMapViewDelegate,CLLocationManagerDelegate>
 
+
+@property BOOL centerLoaded;
 @property (strong, nonatomic) IBOutlet MKMapView *myMapView;
 
 @property (strong, nonatomic) IBOutlet UIButton *btn_done;
@@ -41,8 +43,7 @@
 @property(nonatomic,retain)MKLocalSearchResponse *locations;
 @property(nonatomic,retain)NSArray* GLocs;
 @property(nonatomic)BOOL cmngFromMainViewController;
-@property(nonatomic,retain)NSString *BrandNames;
-@property(nonatomic,retain)NSString *BrandTypes;
+
 @property(nonatomic)BOOL CmngFromParGiftCrd;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *cnst_detailsView_botttom;
 @property (strong, nonatomic) IBOutlet UIButton *btn_myLoc;
@@ -51,5 +52,15 @@
 
 @property(nonatomic,retain)NSArray *NamesArrayFromMain;
 @property(nonatomic,retain)NSArray *TypesArrayFromMain;
+
+@property (strong, nonatomic) IBOutlet UILabel *lbl_BrandTitle;
+
+
+@property (strong, nonatomic) IBOutlet UILabel *lbl_line;
+@property (strong, nonatomic) IBOutlet UIView *view_det_subview;
+
+//@property(nonatomic,retain)NSString *BrandNames;
+//@property(nonatomic,retain)NSString *BrandTypes;
+
 
 @end

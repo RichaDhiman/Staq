@@ -34,6 +34,8 @@
     self.lbl_addPeople.hidden=NO;
     self.btn_send.hidden=YES;
     
+    self.lbl_addPeople.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-30;
+
     self.lbl_noResults.hidden=YES;
     
     self.SelectedEmails =[[NSMutableArray alloc]init];
@@ -112,13 +114,14 @@
     return rowCount;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.SelectedEmails.count!=0||self.SelectedPhoneNo.count!=0) {
-        [self.view resignFirstResponder];
-        [self.view endEditing:YES];
-    }
-}
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (self.SelectedEmails.count!=0||self.SelectedPhoneNo.count!=0) {
+//        [self.view resignFirstResponder];
+//        [self.view endEditing:YES];
+//    }
+//}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -142,47 +145,19 @@
             NSInteger integer;
             integer=indexPath.row-arrEmails.count;
            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
-            if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:integer]]) {
-                
-                //btn green state
-                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_green"] forState:UIControlStateNormal];
-            }
-          else
-            {
-                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-            }
+            
         }
         else
         {
             cell.lbl_emailOrPhnNo.text=[arrEmails objectAtIndex:indexPath.row];
-            if ([self.SelectedEmails containsObject:[arrEmails objectAtIndex:indexPath.row]]) {
-                //btn green state
-                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_green"] forState:UIControlStateNormal];
-                
-            }
-           else
-            {
-                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-                
-            }
-
+            
         }
         return cell;
     }
     else if(arrPhones.count!=0)
     {
         cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
-        if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:indexPath.row]]) {
-            
-            //btn green state
-            [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_green"] forState:UIControlStateNormal];
-        }
-        else
-        {
-            [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-            
-        }
-
+        
         return cell;
     }
     else
@@ -205,19 +180,25 @@
 {
     return 70;
 }
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
+
+   // AppDelegate  *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
+//    [App StartAnimating];
+    self.tbl_contacts.userInteractionEnabled=NO;
+
+    ContactsTableCell *cell=[tableView dequeueReusableCellWithIdentifier:@"ContactsTableCell" forIndexPath:indexPath];
     UserProfile *up=[[UserProfile alloc]init];
     up=[UserProfile getProfile];
-    
+
     NSDictionary *dict=[[NSDictionary alloc]init];
     dict=[self.ContactsArray objectAtIndex:indexPath.section];
-  
-
-    
     NSArray *arrEmails=[[NSArray alloc]init];
     NSArray *arrPhones=[[NSArray alloc]init];
-    
+
     arrEmails=[dict valueForKey:@"email"];
     arrPhones=[dict valueForKey:@"phone"];
     if (arrEmails.count!=0)
@@ -226,64 +207,146 @@
         {
             NSInteger integer;
             integer=indexPath.row-arrEmails.count;
-            
-        //message
 
-         
-            if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:integer]]) {
+            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
+
+            if(![MFMessageComposeViewController canSendText]) {
+                [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
+                UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [warningAlert show];
+                return;
+            }
+            else
+            {
                 
-                [self.SelectedPhoneNo removeObject:[arrPhones objectAtIndex:integer]];
-                if ([self.is_selected containsObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]]) {
-                    [self.is_selected removeObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]];
+                
+                
+                NSMutableArray *recipents =[[NSMutableArray alloc]init];
+                [recipents addObject:[arrPhones objectAtIndex: integer]];
 
-                }
-              
+
+                NSString *messageBody=[[NSString alloc]init];
+                messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
+                
+                MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+                messageController.messageComposeDelegate = self;
+                [messageController setRecipients:recipents];
+                [messageController setBody:messageBody];
+
+                
+//                [self.tbl_contacts reloadRowsAtIndexPaths:integer withRowAnimation:UITableViewRowAnimationNone];
+
+                // Present message view controller on screen
+                [self presentViewController:messageController animated:YES completion:^{
+                    //[App StopAnimating];
+                    
+                   // [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                    self.tbl_contacts.userInteractionEnabled=YES;
+                }];
             }
-           else {
-                [self.SelectedPhoneNo addObject:[arrPhones objectAtIndex:integer]];
-            }
-            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         else
         {
-            //mail
-            if ([self.SelectedEmails containsObject:[arrEmails objectAtIndex:indexPath.row]]) {
+            cell.lbl_emailOrPhnNo.text=[arrEmails objectAtIndex:indexPath.row];
+
+            if(![MFMailComposeViewController canSendMail]) {
+
+                UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Sending Emails!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+
+                [warningAlert show];
+
+                return;
+            }
+
+            else
+            {
+                NSMutableArray *toRecipents =[[NSMutableArray alloc]init];
+                [toRecipents addObject:[arrEmails objectAtIndex: indexPath.row]];
+
+                MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+
+                mc.mailComposeDelegate = self;
+
+                NSString *messageBody=[[NSString alloc]init];
+                messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
                 
-                [self.SelectedEmails removeObject:[arrEmails objectAtIndex:indexPath.row]];
-                if ([self.is_selected containsObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]]) {
-                    
-                    [self.is_selected removeObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]];
-                }
+                [mc setMessageBody:messageBody isHTML:NO];
+                mc.subject=@"I’m sharing my gift cards with you.";
+                [mc setToRecipients:toRecipents];
+
+
+
+                // Present mail view controller on screen
+
+                [self presentViewController:mc animated:YES completion:^{
+                   // [App StopAnimating];
+                //[self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+
+                    self.tbl_contacts.userInteractionEnabled=YES;
+
+                }];
+
             }
-           else {
-                [self.SelectedEmails addObject:[arrEmails objectAtIndex:indexPath.row]];
-            }
-            
-            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
-            
+
+
         }
 
-           }
+    }
     else if(arrPhones.count!=0)
     {
-          //message
-        if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:indexPath.row]]) {
+        cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
+
+        if(![MFMessageComposeViewController canSendText]) {
+            [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [warningAlert show];
+            return;
+        }
+        else
+        {
+            NSMutableArray *recipents =[[NSMutableArray alloc]init];
+            [recipents addObject:[arrPhones objectAtIndex: indexPath.row]];
+
+            NSString *messageBody=[[NSString alloc]init];
+            messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
             
-            [self.SelectedPhoneNo removeObject:[arrPhones objectAtIndex:indexPath.row]];
-            if ([self.is_selected containsObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]]) {
-                [self.is_selected removeObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]];
-            }
+
+            MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+            messageController.messageComposeDelegate = self;
+            [messageController setRecipients:recipents];
+            [messageController setBody:messageBody];
+
+            
+
+            // Present message view controller on screen
+            [self presentViewController:messageController animated:YES completion:^{
+                //[App StopAnimating];
+               // [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+
+                self.tbl_contacts.userInteractionEnabled=YES;
+
+            }];
+
+
         }
-       else {
-            [self.SelectedPhoneNo addObject:[arrPhones objectAtIndex:indexPath.row]];
-        }
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+
+
+
+
 }
 
+
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tbl_contacts deselectRowAtIndexPath:indexPath animated:YES];
+    NSMutableArray* indexes=[[NSMutableArray alloc]init];
+    [indexes addObject:indexPath];
+    [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];
+
+    
+}
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -414,8 +477,8 @@
             }
             
             
-            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];
+            [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationNone];
 
         }
         else
@@ -433,8 +496,8 @@
                     [self.SelectedPhoneNo addObject:[arrPhones objectAtIndex:j]];
                 }
             }
-            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationAutomatic];
-           [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];
+           [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationNone];
         }
 
     }
@@ -478,8 +541,8 @@
             }
             
             
-            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationAutomatic];
-             [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];
+             [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationNone];
         }
         else
         {
@@ -496,8 +559,8 @@
                   //  [self.SelectedPhoneNo addObject:[arrPhones objectAtIndex:i]];
                 }
             }
-            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationAutomatic];
-          [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tbl_contacts reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];
+          [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationNone];
         }
 
     }
@@ -537,13 +600,18 @@
     self.SelectedPhoneNo=[[NSMutableArray alloc]init];
     self.is_selected=[[NSMutableArray alloc]init];
     
-    [self.tbl_contacts reloadData];
+    //[self.tbl_contacts reloadData];
+    [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+                                     withObject:nil
+                                  waitUntilDone:NO];
     self.lbl_noResults.hidden=(searchFilters.count==0)? NO:YES;
     
     self.btn_send.hidden=(searchFilters.count==0)? YES:NO;
 
     
 }
+
+
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     self.tbl_contacts.hidden=YES;
@@ -563,7 +631,10 @@
     //    [self.searchBar resignFirstResponder];
     
     [self GetContactsList];
-    [self.tbl_contacts reloadData];
+   // [self.tbl_contacts reloadData];
+    [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+                                     withObject:nil
+                                  waitUntilDone:NO];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -721,7 +792,10 @@
             
         }
         
-            [self.tbl_contacts reloadData];
+           // [self.tbl_contacts reloadData];
+            [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+                                             withObject:nil
+                                          waitUntilDone:NO];
 //        success(contactsArray);
                 //8
     
@@ -765,17 +839,14 @@
             break;
     }
     
-   // [self dismissViewControllerAnimated:YES completion:nil];
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.App StopAnimating];
         self.tbl_contacts.userInteractionEnabled=YES;
         
-        self.SelectedPhoneNo=[[NSMutableArray alloc]init];
-        self.SelectedEmails=[[NSMutableArray alloc]init];
-        self.is_selected=[[NSMutableArray alloc]init];
-        
-        [self.tbl_contacts reloadData];
+        [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+                                         withObject:nil
+                                      waitUntilDone:NO];
     }];
     
 }
@@ -786,46 +857,6 @@
     switch (result) {
         case MFMailComposeResultCancelled:
             NSLog(@"EmailCanceled");
-        {
-            UserProfile *up=[[UserProfile alloc]init];
-            up=[UserProfile getProfile];
-            
-            if (self.SelectedPhoneNo.count!=0) {
-                
-                if(![MFMessageComposeViewController canSendText]) {
-                    // [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-                    UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [warningAlert show];
-                    return;
-                }
-                else
-                {
-                    NSMutableArray *recipents =[[NSMutableArray alloc]init];
-                    //[recipents addObject:[arrPhones objectAtIndex: integer]];
-                    [recipents addObjectsFromArray:self.SelectedPhoneNo];
-                    
-                    //I’m sharing my gift cards with you.
-//
-                    
-                    NSString *messageBody=[[NSString alloc]init];
-                   messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
-
-//                    messageBody=up.user_code;
-                    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
-                 
-                    [messageController setRecipients:recipents];
-                    
-                    [messageController setBody:messageBody];
-                    messageController.messageComposeDelegate = self;
-                    // Present message view controller on screen
-                    [self presentViewController:messageController animated:YES completion:^{
-                        
-                        
-                    }];
-                }
-                
-            }
-        }
 
             break;
             
@@ -839,67 +870,19 @@
             
         case MFMailComposeResultSent:
                NSLog(@"EmailSent");
-        {
-            UserProfile *up=[[UserProfile alloc]init];
-            up=[UserProfile getProfile];
-
-            if (self.SelectedPhoneNo.count!=0) {
-                
-                if(![MFMessageComposeViewController canSendText]) {
-                    // [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-                    UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [warningAlert show];
-                    return;
-                }
-                else
-                {
-                    NSMutableArray *recipents =[[NSMutableArray alloc]init];
-                    //[recipents addObject:[arrPhones objectAtIndex: integer]];
-                    [recipents addObjectsFromArray:self.SelectedPhoneNo];
-                    
-//                    NSString *messageBody=[[NSString alloc]init];
-//                    messageBody=up.user_code;
-                    NSString *messageBody=[[NSString alloc]init];
-                    messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\nClick on the Family Share, then the SYNC button,and paste this code:\n%@",up.user_code];
-                    
-                    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
-                    messageController.messageComposeDelegate = self;
-                    [messageController setRecipients:recipents];
-                    [messageController setBody:messageBody];
-                    
-                    // Present message view controller on screen
-                    [self presentViewController:messageController animated:YES completion:^{
-                   
-                    }];
-                }
-
-            }
-          }
-        break;
+              break;
             
         default:
             break;
     }
     
-    //[controller dismissViewControllerAnimated:NO completion:nil];
     [controller dismissViewControllerAnimated:NO completion:^{
-        [self.App StopAnimating];
         self.tbl_contacts.userInteractionEnabled=YES;
-        
-        if (self.SelectedPhoneNo.count!=0) {
-            self.SelectedEmails=[[NSMutableArray alloc]init];
-           [self.tbl_contacts reloadData];
-        }
-        else
-        {
-             self.SelectedEmails=[[NSMutableArray alloc]init];
-            self.SelectedPhoneNo=[[NSMutableArray alloc]init];
-            self.is_selected=[[NSMutableArray alloc]init];
+        [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+                                            withObject:nil
+                                         waitUntilDone:NO];
 
-            [self.tbl_contacts reloadData];
-        }
-        
-    }];
+           }];
     
 }
 
@@ -927,6 +910,8 @@
     }
     
 }
+
+
 
 -(void)send
 {
@@ -956,7 +941,7 @@
             mc.mailComposeDelegate = self;
             
             NSString *messageBody=[[NSString alloc]init];
-            messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
+            messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
             
             [mc setMessageBody:messageBody isHTML:NO];
              mc.subject=@"I’m sharing my gift cards with you.";
@@ -988,7 +973,7 @@
             [recipents addObjectsFromArray:self.SelectedPhoneNo];
             
             NSString *messageBody=[[NSString alloc]init];
-            messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
+            messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
             
             MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
             messageController.messageComposeDelegate = self;
@@ -1031,7 +1016,7 @@
                         [recipents addObjectsFromArray:self.SelectedPhoneNo];
                         
                         NSString *messageBody=[[NSString alloc]init];
-                        messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
+                        messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
                         
                         MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
                         messageController.messageComposeDelegate = self;
@@ -1354,6 +1339,287 @@
 //    
 //}// custom view for header. will be adjusted to default or specified header height
 
+
+//   ////////////////did select when have to send mails,msgs simultaneously
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UserProfile *up=[[UserProfile alloc]init];
+//    up=[UserProfile getProfile];
+//
+//    NSDictionary *dict=[[NSDictionary alloc]init];
+//    dict=[self.ContactsArray objectAtIndex:indexPath.section];
+//
+//
+//
+//    NSArray *arrEmails=[[NSArray alloc]init];
+//    NSArray *arrPhones=[[NSArray alloc]init];
+//
+//    arrEmails=[dict valueForKey:@"email"];
+//    arrPhones=[dict valueForKey:@"phone"];
+//    if (arrEmails.count!=0)
+//    {
+//        if (indexPath.row>=arrEmails.count)
+//        {
+//            NSInteger integer;
+//            integer=indexPath.row-arrEmails.count;
+//
+//        //message
+//
+//
+//            if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:integer]]) {
+//
+//                [self.SelectedPhoneNo removeObject:[arrPhones objectAtIndex:integer]];
+//                if ([self.is_selected containsObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]]) {
+//                    [self.is_selected removeObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]];
+//
+//                }
+//
+//            }
+//           else {
+//                [self.SelectedPhoneNo addObject:[arrPhones objectAtIndex:integer]];
+//            }
+//            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//            [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+//        }
+//        else
+//        {
+//            //mail
+//            if ([self.SelectedEmails containsObject:[arrEmails objectAtIndex:indexPath.row]]) {
+//
+//                [self.SelectedEmails removeObject:[arrEmails objectAtIndex:indexPath.row]];
+//                if ([self.is_selected containsObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]]) {
+//
+//                    [self.is_selected removeObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]];
+//                }
+//            }
+//           else {
+//                [self.SelectedEmails addObject:[arrEmails objectAtIndex:indexPath.row]];
+//            }
+//
+//            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//            [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+//
+//        }
+//
+//           }
+//    else if(arrPhones.count!=0)
+//    {
+//          //message
+//        if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:indexPath.row]]) {
+//
+//            [self.SelectedPhoneNo removeObject:[arrPhones objectAtIndex:indexPath.row]];
+//            if ([self.is_selected containsObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]]) {
+//                [self.is_selected removeObject:[NSString stringWithFormat:@"%li",(long)indexPath.section]];
+//            }
+//        }
+//       else {
+//            [self.SelectedPhoneNo addObject:[arrPhones objectAtIndex:indexPath.row]];
+//        }
+//        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//        [self.tbl_contacts reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+//    }
+//}
+
+
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    ContactsTableCell *cell=[tableView dequeueReusableCellWithIdentifier:@"ContactsTableCell" forIndexPath:indexPath];
+//    //////
+//    
+//    
+//    
+//    NSDictionary *dict=[[NSDictionary alloc]init];
+//    dict=[self.ContactsArray objectAtIndex:indexPath.section];
+//    NSArray *arrEmails=[[NSArray alloc]init];
+//    NSArray *arrPhones=[[NSArray alloc]init];
+//    
+//    arrEmails=[dict valueForKey:@"email"];
+//    arrPhones=[dict valueForKey:@"phone"];
+//    
+//    if (arrEmails.count!=0) {
+//        
+//        if (indexPath.row>=arrEmails.count)
+//        {
+//            NSInteger integer;
+//            integer=indexPath.row-arrEmails.count;
+//            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
+//            if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:integer]]) {
+//                
+//                //btn green state
+//                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_green"] forState:UIControlStateNormal];
+//            }
+//            else
+//            {
+//                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
+//            }
+//        }
+//        else
+//        {
+//            cell.lbl_emailOrPhnNo.text=[arrEmails objectAtIndex:indexPath.row];
+//            if ([self.SelectedEmails containsObject:[arrEmails objectAtIndex:indexPath.row]]) {
+//                //btn green state
+//                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_green"] forState:UIControlStateNormal];
+//                
+//            }
+//            else
+//            {
+//                [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
+//                
+//            }
+//            
+//        }
+//        return cell;
+//    }
+//    else if(arrPhones.count!=0)
+//    {
+//        cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
+//        if ([self.SelectedPhoneNo containsObject:[arrPhones objectAtIndex:indexPath.row]]) {
+//            
+//            //btn green state
+//            [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_green"] forState:UIControlStateNormal];
+//        }
+//        else
+//        {
+//            [cell.btn_send setBackgroundImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
+//            
+//        }
+//        
+//        return cell;
+//    }
+//    else
+//    {
+//        return cell;
+//    }
+//    
+//}
+//  ////////////mail composer
+//-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+//{
+//    switch (result) {
+//        case MFMailComposeResultCancelled:
+//            NSLog(@"EmailCanceled");
+//        {
+//            UserProfile *up=[[UserProfile alloc]init];
+//            up=[UserProfile getProfile];
+//            
+//            if (self.SelectedPhoneNo.count!=0) {
+//                
+//                if(![MFMessageComposeViewController canSendText]) {
+//                    // [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
+//                    UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                    [warningAlert show];
+//                    return;
+//                }
+//                else
+//                {
+//                    NSMutableArray *recipents =[[NSMutableArray alloc]init];
+//                    //[recipents addObject:[arrPhones objectAtIndex: integer]];
+//                    [recipents addObjectsFromArray:self.SelectedPhoneNo];
+//                    
+//                    //I’m sharing my gift cards with you.
+//                    //
+//                    
+//                    NSString *messageBody=[[NSString alloc]init];
+//                    messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
+//                    
+//                    //                    messageBody=up.user_code;
+//                    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+//                    
+//                    [messageController setRecipients:recipents];
+//                    
+//                    [messageController setBody:messageBody];
+//                    messageController.messageComposeDelegate = self;
+//                    // Present message view controller on screen
+//                    [self presentViewController:messageController animated:YES completion:^{
+//                        
+//                        
+//                    }];
+//                }
+//                
+//            }
+//        }
+//            
+//            break;
+//            
+//        case MFMailComposeResultFailed:
+//        {
+//            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send email!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            warningAlert.tag=3;
+//            [warningAlert show];
+//            break;
+//        }
+//            
+//        case MFMailComposeResultSent:
+//            NSLog(@"EmailSent");
+//        {
+//            UserProfile *up=[[UserProfile alloc]init];
+//            up=[UserProfile getProfile];
+//            
+//            if (self.SelectedPhoneNo.count!=0) {
+//                
+//                if(![MFMessageComposeViewController canSendText]) {
+//                    // [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
+//                    UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                    [warningAlert show];
+//                    return;
+//                }
+//                else
+//                {
+//                    NSMutableArray *recipents =[[NSMutableArray alloc]init];
+//                    //[recipents addObject:[arrPhones objectAtIndex: integer]];
+//                    [recipents addObjectsFromArray:self.SelectedPhoneNo];
+//                    
+//                    //                    NSString *messageBody=[[NSString alloc]init];
+//                    //                    messageBody=up.user_code;
+//                    NSString *messageBody=[[NSString alloc]init];
+//                    messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button,and paste this code:\n%@",up.user_code];
+//                    
+//                    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+//                    messageController.messageComposeDelegate = self;
+//                    [messageController setRecipients:recipents];
+//                    [messageController setBody:messageBody];
+//                    
+//                    // Present message view controller on screen
+//                    [self presentViewController:messageController animated:YES completion:^{
+//                        
+//                    }];
+//                }
+//                
+//            }
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    
+//    //[controller dismissViewControllerAnimated:NO completion:nil];
+//    [controller dismissViewControllerAnimated:NO completion:^{
+//        [self.App StopAnimating];
+//        self.tbl_contacts.userInteractionEnabled=YES;
+//        
+//        if (self.SelectedPhoneNo.count!=0) {
+//            self.SelectedEmails=[[NSMutableArray alloc]init];
+//            //[self.tbl_contacts reloadData];
+//            [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+//                                                withObject:nil
+//                                             waitUntilDone:NO];
+//        }
+//        else
+//        {
+//            self.SelectedEmails=[[NSMutableArray alloc]init];
+//            self.SelectedPhoneNo=[[NSMutableArray alloc]init];
+//            self.is_selected=[[NSMutableArray alloc]init];
+//            
+//            //[self.tbl_contacts reloadData];
+//            [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+//                                                withObject:nil
+//                                             waitUntilDone:NO];
+//        }
+//        
+//    }];
+//    
+//}
 
 
 @end

@@ -141,7 +141,10 @@
     self.MyBrands=[[NSArray alloc]init];
     self.MyBrands=[UserProfile getBrandsInfo];
     self.FilteredBrand=[[UserProfile getBrandsInfo] mutableCopy];
-    [self.tbl_retailers reloadData];
+   // [self.tbl_retailers reloadData];
+    [self.tbl_retailers performSelectorOnMainThread:@selector(reloadData)
+                                     withObject:nil
+                                  waitUntilDone:NO];
 
 }
 
@@ -189,7 +192,10 @@
     NSString* filter = @"%K CONTAINS[cd] %@";
     NSPredicate* predicate = [NSPredicate predicateWithFormat:filter, @"bDet_name", searchText];
     self.MyBrands = [[self.FilteredBrand filteredArrayUsingPredicate:predicate] mutableCopy];
-       [self.tbl_retailers reloadData];
+     //  [self.tbl_retailers reloadData];
+    [self.tbl_retailers performSelectorOnMainThread:@selector(reloadData)
+                                     withObject:nil
+                                  waitUntilDone:NO];
     
     self.lbl_noResult.hidden=(self.MyBrands.count==0)? NO:YES;
 }

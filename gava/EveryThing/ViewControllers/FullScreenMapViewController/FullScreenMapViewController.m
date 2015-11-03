@@ -25,9 +25,10 @@
 
 @implementation FullScreenMapViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+  
     
     if([CLLocationManager locationServicesEnabled] &&
        [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
@@ -47,8 +48,6 @@ else
     self.locationManager.delegate=self;
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
-        
-        //    [self.locationManager requestAlwaysAuthorization];
         [self.locationManager requestWhenInUseAuthorization];
     
     [self.locationManager startUpdatingLocation];
@@ -60,15 +59,14 @@ else
     [[NSUserDefaults standardUserDefaults]setValue:self.lng forKey:@"lng"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [UIView animateWithDuration:0.3 animations:^{
-        self.cnst_detailsView_botttom.constant=-self.view_detailView.frame.size.height;
-        
-    } completion:nil];
+    
 
     [self setNeedsStatusBarAppearanceUpdate];
-     self.GoogleLocs=[[NSMutableArray alloc]init];
+  
 
     self.lbl_brandName.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-90;
+    self.lbl_BrandTitle.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-90;
+
     // Do any additional setup after loading the view.
 }
 
@@ -93,12 +91,23 @@ else
     [self viewHelper];
     [self.myMapView
      setShowsUserLocation:YES];
-   
+    
+    [UIView animateWithDuration:0.3 animations:^{
+       // self.cnst_detailsView_botttom.constant=-150;
+        
+    } completion:nil];
+    self.view_detailView.hidden=YES;
+    self.lbl_line.hidden=YES;
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    
+     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [super viewWillDisappear:animated];
+  
+
+   
 }
 
 -(void)viewHelper
@@ -113,18 +122,28 @@ else
      didUpdateLocations:(NSArray *)locations
 {
     
-    if (self.locationManager.location!=nil)
-    {
-        self.lat= [NSString stringWithFormat:@"%f",self.locationManager.location.coordinate.latitude ];
-        self.lng = [NSString stringWithFormat:@"%f",self.locationManager.location.coordinate.longitude ];
+    CLLocation *locationCurrent = [locations lastObject];
+    NSLog(@"Lat : %f \n Long %f",locationCurrent.coordinate.latitude,locationCurrent.coordinate.longitude);
+//    if (self.locationManager.location!=nil)
+//    {
+        self.lat= [NSString stringWithFormat:@"%f",locationCurrent.coordinate.latitude ];
+        self.lng = [NSString stringWithFormat:@"%f",locationCurrent.coordinate.longitude ];
         
         [[NSUserDefaults standardUserDefaults]setValue:self.lat forKey:@"lat"];
         [[NSUserDefaults standardUserDefaults]setValue:self.lng forKey:@"lng"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         [self.locationManager stopUpdatingLocation];
+    [self.locationManager setDelegate:nil];
         [self mapWork];
-    }
+//    }
+//    else
+//    {
+//        AlertView *alert=[[AlertView alloc]init];
+//        [alert showStaticAlertWithTitle:@"" AndMessage:@"Please check your Internet Connection!"];
+//       
+//    }
+    
 }
 
 
@@ -177,15 +196,22 @@ else
     
     ///Search
     
-    
-    if (self.GLocs.count==0)
-    {
-       [self googleNearestLoc];
+    if (self.CmngFromParGiftCrd==YES) {
+        
+        if (self.GLocs.count==0)
+        {
+            [self googleNearestLoc1];
+        }
+        else
+        {
+            self.GoogleLocs=[self.GLocs mutableCopy];
+            
+            [self plotPositions:self.GoogleLocs];
+        }
     }
     else
     {
-        self.GoogleLocs=self.GLocs;
-        [self plotPositions:self.GoogleLocs];
+        [self googleNearestLoc1];
     }
     
 }
@@ -193,99 +219,185 @@ else
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
     [UIView animateWithDuration:0.3 animations:^{
-        self.cnst_detailsView_botttom.constant=0;
-    } completion:nil];
-    NSLog(@"Tapped on: %@", view.annotation.title);
+        //self.cnst_detailsView_botttom.constant=0;
+        
+        
+        self.view_detailView.hidden=NO;
+        self.lbl_line.hidden=NO;
+        NSLog(@"Tapped on: %@", view.annotation.title);
+        
+        //[self.lbl_BrandTitle setTextAlignment:NSTextAlignmentJustified];
+        
+        [self.lbl_BrandTitle setText:view.annotation.title];
+        
+        //    NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:[view.annotation.title capitalizedString]];
+        //    NSInteger _stringLength=[attString length];
+        //
+        //    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:20.0f] range:NSMakeRange(0, _stringLength)];
+        //    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength)];
+        
+        
+        NSString *str=[[NSString alloc]init];
+        str=view.annotation.subtitle;
+        if (str.length==0) {
+            str=@" ";
+        }
+        
+        NSMutableAttributedString *attString2=[[NSMutableAttributedString alloc] initWithString:str];
+        
+        //NSMutableAttributedString *attString2=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@",str ]];
+        NSInteger _stringLength2=[str length];
+        //Helvetica-Light
+        
+        UIFont *font2=[UIFont fontWithName:@"Helvetica" size:12.0f];
+        [attString2 addAttribute:NSFontAttributeName value:font2 range:NSMakeRange(0, _stringLength2)];
+        [attString2 addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength2)];
+        
+        NSMutableAttributedString *NotiComment = [[NSMutableAttributedString alloc] initWithAttributedString:attString2];
+        
+        //[NotiComment appendAttributedString:attString2];
+        
+        self.lbl_brandName.attributedText = NotiComment;
+        
+        self.DlocPM=[view.annotation coordinate];
+        
 
+    } completion:^(BOOL finished) {
+        [self.view_det_subview layoutIfNeeded];
+        [self.view_detailView layoutIfNeeded];
+    }];
     
     
-    NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:[view.annotation.title capitalizedString]];
-    NSInteger _stringLength=[attString length];
     
-    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:20.0f] range:NSMakeRange(0, _stringLength)];
-    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength)];
-    
-    
-    NSString *str=[[NSString alloc]init];
-    str=view.annotation.subtitle;
-    
-    
-    NSMutableAttributedString *attString2=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@",str ]];
-    NSInteger _stringLength2=[str length];
-    //Helvetica-Light
-    
-    UIFont *font2=[UIFont fontWithName:@"Helvetica" size:12.0f];
-    [attString2 addAttribute:NSFontAttributeName value:font2 range:NSMakeRange(0, _stringLength2+1)];
-    [attString2 addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength2+1)];
-    
-    NSMutableAttributedString *NotiComment = [[NSMutableAttributedString alloc] initWithAttributedString:attString];
-    
-    [NotiComment appendAttributedString:attString2];
-    
-    self.lbl_brandName.attributedText = NotiComment;
-
-    self.DlocPM=[view.annotation coordinate];
 }
 
 
 -(void)googleNearestLoc
 {
     NSString *url=[[NSString alloc]init];
+    int x=0;
     
-     if (self.cmngFromMainViewController==YES && [self.BrandNames length]>0)
+     if (self.cmngFromMainViewController==YES && self.NamesArrayFromMain.count>0)
     {
-        url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=AIzaSyBY5AWF0BwMMD_oxmm1KHSvEZkAuQLAx0Q&keyword=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],self.BrandNames,self.BrandTypes,@"distance"];
-   
+//        url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=AIzaSyBY5AWF0BwMMD_oxmm1KHSvEZkAuQLAx0Q&keyword=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],self.BrandNames,self.BrandTypes,@"distance"];
+        self.GoogleLocs=[[NSMutableArray alloc]init];
+  
+        
+        while (x<self.NamesArrayFromMain.count) {
+            
+            url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=%@&name=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],ApiKey,[self.NamesArrayFromMain objectAtIndex:x],[self.TypesArrayFromMain objectAtIndex:x],@"distance"];
+            
             self.cmngFromMainViewController=NO;
-//        for (int i=0; i<self.NamesArrayFromMain.count; i++) {
-//            
-//            url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=AIzaSyBY5AWF0BwMMD_oxmm1KHSvEZkAuQLAx0Q&keyword=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],[self.NamesArrayFromMain objectAtIndex:i],[self.TypesArrayFromMain objectAtIndex:i],@"distance"];
-//            
-//            [IOSRequest fetchJsonData:url success:^(NSDictionary *responseDict)
-//             {
-//                 self.GoogleLocs=[[NSMutableArray alloc]init];
-//                // self.GoogleLocs=[responseDict valueForKey:@"results"];
-//                 [self.GoogleLocs addObjectsFromArray:[responseDict valueForKey:@"results"]];
-//                 
-//                 
-//             } failure:^(NSError *error) {
-//                 
-//             }];
-//        
-//        }
-        //[self plotPositions:self.GoogleLocs];
+            
+            [IOSRequest fetchJsonData:url success:^(NSDictionary *responseDict)
+             {
+                
+                 // self.GoogleLocs=[responseDict valueForKey:@"results"];
+                 [self.GoogleLocs addObjectsFromArray:[responseDict valueForKey:@"results"]];
+                 [self plotPositions:[responseDict valueForKey:@"results"]];
+             } failure:^(NSError *error) {
+                 
+             }];
+          
+              x++;
+        }
    
     }
-    else if([self.BrandNames length]<=0 && self.cmngFromMainViewController==YES)
+    else if(self.NamesArrayFromMain.count<=0 && self.cmngFromMainViewController==YES)
     {
         
     }
     else if(self.CmngFromParGiftCrd==YES)
     {
-        url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=AIzaSyBY5AWF0BwMMD_oxmm1KHSvEZkAuQLAx0Q&keyword=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],self.cardDet.brandDet.bDet_name,self.cardDet.brandDet.bDet_brand_type ,@"distance"];
+        url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=%@&name=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],ApiKey,self.cardDet.brandDet.bDet_name,self.cardDet.brandDet.bDet_brand_type ,@"distance"];
+        
+        [IOSRequest fetchJsonData:url success:^(NSDictionary *responseDict)
+         {
+             self.GoogleLocs=[[NSMutableArray alloc]init];
+             self.GoogleLocs=[responseDict valueForKey:@"results"];
+             
+             [self plotPositions:self.GoogleLocs];
+             
+         } failure:^(NSError *error) {
+             
+         }];
+
+    }
+    
+    
+    
+}
+-(void)googleNearestLoc1
+{
+    NSString *url=[[NSString alloc]init];
+      int x=0;
+    
+    if (self.cmngFromMainViewController==YES && self.NamesArrayFromMain.count>0)
+    {
+        //        url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=AIzaSyBY5AWF0BwMMD_oxmm1KHSvEZkAuQLAx0Q&keyword=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],self.BrandNames,self.BrandTypes,@"distance"];
+        self.GoogleLocs=[[NSMutableArray alloc]init];
+        
+        
+        while (x<self.NamesArrayFromMain.count) {
+            
+            [self performSelector:@selector(getLocs:) withObject:[NSNumber numberWithInt:x] afterDelay:2];
+            x++;
+        }
+        
+    }
+    else if(self.NamesArrayFromMain.count<=0 && self.cmngFromMainViewController==YES)
+    {
+        
+    }
+    else if(self.CmngFromParGiftCrd==YES)
+    {
+        url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=%@&name=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],ApiKey,self.cardDet.brandDet.bDet_name,self.cardDet.brandDet.bDet_brand_type ,@"distance"];
+        
+        [IOSRequest fetchJsonData:url success:^(NSDictionary *responseDict)
+         {
+             self.GoogleLocs=[[NSMutableArray alloc]init];
+             self.GoogleLocs=[responseDict valueForKey:@"results"];
+             
+             [self plotPositions:self.GoogleLocs];
+             
+         } failure:^(NSError *error) {
+             
+         }];
         
     }
     
+    
+    
+}
+
+-(void)getLocs:(NSNumber *)x
+{
+   NSString  *url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=%@&name=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],ApiKey,[self.NamesArrayFromMain objectAtIndex:x.integerValue],[self.TypesArrayFromMain objectAtIndex:x.integerValue],@"distance"];
+    
+    self.cmngFromMainViewController=NO;
+    
     [IOSRequest fetchJsonData:url success:^(NSDictionary *responseDict)
      {
-         self.GoogleLocs=[[NSMutableArray alloc]init];
-         self.GoogleLocs=[responseDict valueForKey:@"results"];
          
-         [self plotPositions:self.GoogleLocs];
-         
+         // self.GoogleLocs=[responseDict valueForKey:@"results"];
+         [self.GoogleLocs addObjectsFromArray:[responseDict valueForKey:@"results"]];
+         [self plotPositions:[responseDict valueForKey:@"results"]];
      } failure:^(NSError *error) {
          
      }];
 
-    
 }
-
 -(void)plotPositions:(NSArray *)data {
     // 1 - Remove any existing custom annotations but not the user location blue dot.
-    for (id<MKAnnotation> annotation in self.myMapView.annotations) {
-        if ([annotation isKindOfClass:[MapPoint class]]) {
-            [self.myMapView removeAnnotation:annotation];
-        }
+    
+    if (!self.cmngFromMainViewController==YES) {
+        
+        for (id<MKAnnotation> annotation in self.myMapView.annotations) {
+            if ([annotation isKindOfClass:[MapPoint class]]) {
+                [self.myMapView removeAnnotation:annotation];
+            }
+    }
+  
     }
     
     if([self.GoogleLocs count]==0)
@@ -314,9 +426,11 @@ else
             // 5 - Create a new annotation.
             MapPoint *placeObject = [[MapPoint alloc] initWithName:name address:vicinity coordinate:placeCoord];
             [self.myMapView addAnnotation:placeObject];
-            if (i==0)
+            
+            
+            if (i==0&&self.centerLoaded==false)
             {
-                
+                self.centerLoaded = true;
                 MKCoordinateSpan zoom;
                 zoom.latitudeDelta = .1f; //the zoom level in degrees
                 zoom.longitudeDelta = .1f;//the zoom level in degrees
@@ -327,7 +441,7 @@ else
                 
                 [self.myMapView selectAnnotation:placeObject animated:YES];
             }
-        }
+         }
 
     }
     

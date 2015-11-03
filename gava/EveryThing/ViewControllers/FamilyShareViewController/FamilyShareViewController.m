@@ -11,6 +11,11 @@
 @interface FamilyShareViewController ()
 @property(nonatomic,retain)UIPanGestureRecognizer *panGestureRecognizer;
 @property(nonatomic,retain)NSArray *SyncFriends;
+@property(nonatomic,retain)NSMutableArray* filteredPlacesNames;
+@property(nonatomic,retain)NSMutableArray* filteredPlacesTypes;
+@property(nonatomic,retain)NSMutableArray *Names;
+@property(nonatomic,retain)NSArray *MyCards;
+
 @end
 
 @implementation FamilyShareViewController
@@ -31,7 +36,7 @@
 
 -(void)viewHelper
 {
-    
+    self.MyCards=[[NSArray alloc]init];
     
     self.lbl_versionNo.text=[NSString stringWithFormat:@"v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
 
@@ -138,7 +143,10 @@
         self.tbl_familyShare.hidden=NO;
         self.view_top.hidden=YES;
         self.view_middle.hidden=YES;
-        [self.tbl_familyShare reloadData];
+       // [self.tbl_familyShare reloadData];
+        [self.tbl_familyShare performSelectorOnMainThread:@selector(reloadData)
+                                         withObject:nil
+                                      waitUntilDone:NO];
     }
  
     
@@ -346,10 +354,9 @@
     FullScreenMapViewController *controller=[mainStoryboard instantiateViewControllerWithIdentifier:@"FullScreenMapViewController"];
     //    controller.cardDet=self.cdet;
     controller.cmngFromMainViewController=YES;
-    controller.cmngFromMainViewController=YES;
-    
-    controller.BrandNames=[[NSUserDefaults standardUserDefaults]valueForKey:@"PlacesNames"];
-    controller.BrandTypes=[[NSUserDefaults standardUserDefaults]valueForKey:@"PlacesTypes"];
+ 
+    controller.NamesArrayFromMain=[[NSUserDefaults standardUserDefaults]valueForKey:@"PlacesNames"];
+    controller.TypesArrayFromMain=[[NSUserDefaults standardUserDefaults]valueForKey:@"PlacesTypes"];
     [self.navigationController pushViewController:controller animated:YES];
 }
 - (IBAction)btn_logout_pressed:(id)sender {
@@ -456,6 +463,8 @@
              [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"PlacesTypes"];
              [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"result"];
              [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"users"];
+             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"PlacesNames"];
+             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"PlacesTypes"];
              
 
              [[NSUserDefaults standardUserDefaults]synchronize];
@@ -560,14 +569,10 @@
                  [UserProfile saveSyncFrndsInfo:[responseStr valueForKey:@"users"]];
                  [self getSyncFrnds];
                  
-                 NSArray *arr=[[NSArray alloc]init];
-                 arr=[responseStr valueForKey:@"cards"];
-                 self.lbl_NoofCards.text=[NSString stringWithFormat:@"%lu",(unsigned long)arr.count ];
-                 [[NSUserDefaults standardUserDefaults]setValue:[NSString stringWithFormat:@"%lu",(unsigned long)arr.count ] forKey:@"NoOfCards"];
-                 
+                 [CardDetails saveCardsInfo:[responseStr valueForKey:@"cards"]];
+                 [self GetCards];
                  [[NSUserDefaults standardUserDefaults]setValue:[responseStr valueForKey:@"total"] forKey:@"total"];
-
-    
+                 [self.lbl_total setText:[responseStr valueForKey:@"total"]];
                  
              }
              else if([[responseStr valueForKey:@"success"]integerValue]==2)
@@ -615,5 +620,46 @@
 }
 
 
+-(void)GetCards
+{
+    self.MyCards=[CardDetails getCardsInfo];
+    
+    self.filteredPlacesNames=[[NSMutableArray alloc]init];
+    self.Names=[[NSMutableArray alloc]init];
+    self.filteredPlacesTypes=[[NSMutableArray alloc]init];
+    
+    for (CardDetails *temp in self.MyCards)
+    {
+        if ([self.Names containsObject:temp.brandDet.bDet_name]) {
+            
+        }
+        else
+        {
+            if ([temp.brandDet.bDet_name rangeOfString:@"\""].location != NSNotFound)
+            {
+                NSString *str=[[NSString alloc]init];
+                str = [temp.brandDet.bDet_name stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                
+                [self.filteredPlacesNames addObject:[NSString stringWithFormat:@"\"%@\"",str]];
+                [self.Names addObject:temp.brandDet.bDet_name];
+            }
+            else
+            {
+                [self.filteredPlacesNames addObject:[NSString stringWithFormat:@"\"%@\"",temp.brandDet.bDet_name]];
+                [self.Names addObject:temp.brandDet.bDet_name];
+            }
+            [self.filteredPlacesTypes addObject:temp.brandDet.bDet_brand_type];
+            
+        }
+        
+    }
+    
+    self.lbl_NoofCards.text=[NSString stringWithFormat:@"%lu",(unsigned long)self.MyCards.count ];
+    [[NSUserDefaults standardUserDefaults]setValue:[NSString stringWithFormat:@"%lu",(unsigned long)self.MyCards.count ] forKey:@"NoOfCards"];
+    
+    [[NSUserDefaults standardUserDefaults]setValue:self.filteredPlacesNames forKey:@"PlacesNames"];
+    [[NSUserDefaults standardUserDefaults]setValue:self.filteredPlacesTypes forKey:@"PlacesTypes"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
 
 @end
