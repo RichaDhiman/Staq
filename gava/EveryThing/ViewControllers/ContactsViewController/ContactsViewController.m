@@ -22,6 +22,7 @@
 @property(nonatomic)NSInteger HeaderIndex;
 @property(nonatomic,retain)AppDelegate *App;
 @property(nonatomic,retain)NSMutableArray* is_selected;
+@property(nonatomic,retain)NSString *SyncCode;
 
 @end
 
@@ -144,7 +145,21 @@
         {
             NSInteger integer;
             integer=indexPath.row-arrEmails.count;
-           cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
+            
+            NSString *str=[[NSString alloc]init];
+            str=[arrPhones objectAtIndex:integer];
+            NSString *str2=[[NSString alloc]init];
+            str2=[str substringWithRange:NSMakeRange(0, 3)];
+            NSString *str3=[[NSString alloc]init];
+            str3=[str substringWithRange:NSMakeRange(3, 3)];
+            
+            NSString *str4=[[NSString alloc]init];
+            str4=[str substringWithRange:NSMakeRange(6, 4)];
+            
+            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+            
+            //cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
+
             
         }
         else
@@ -156,7 +171,19 @@
     }
     else if(arrPhones.count!=0)
     {
-        cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
+        NSString *str=[[NSString alloc]init];
+        str=[arrPhones objectAtIndex:indexPath.row];
+        NSString *str2=[[NSString alloc]init];
+        str2=[str substringWithRange:NSMakeRange(0, 3)];
+        NSString *str3=[[NSString alloc]init];
+        str3=[str substringWithRange:NSMakeRange(3, 3)];
+        
+        NSString *str4=[[NSString alloc]init];
+        str4=[str substringWithRange:NSMakeRange(6, 4)];
+        
+        cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+        
+        //cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
         
         return cell;
     }
@@ -184,7 +211,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    self.SyncCode=[[NSString alloc]init];
 
    // AppDelegate  *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
 //    [App StartAnimating];
@@ -208,130 +235,50 @@
             NSInteger integer;
             integer=indexPath.row-arrEmails.count;
 
-            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
+            
+            NSString *str=[[NSString alloc]init];
+            str=[arrPhones objectAtIndex:integer];
+            NSString *str2=[[NSString alloc]init];
+            str2=[str substringWithRange:NSMakeRange(0, 3)];
+            NSString *str3=[[NSString alloc]init];
+            str3=[str substringWithRange:NSMakeRange(3, 3)];
+            
+            NSString *str4=[[NSString alloc]init];
+            str4=[str substringWithRange:NSMakeRange(6, 4)];
+            
+            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+           // cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
+            
+            [self getSyncCode:[dict valueForKey:@"name"] :@"" :[arrPhones objectAtIndex:integer]];
 
-            if(![MFMessageComposeViewController canSendText]) {
-                [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-                UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [warningAlert show];
-                return;
-            }
-            else
-            {
-                
-                
-                
-                NSMutableArray *recipents =[[NSMutableArray alloc]init];
-                [recipents addObject:[arrPhones objectAtIndex: integer]];
-
-
-                NSString *messageBody=[[NSString alloc]init];
-                messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
-                
-                MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
-                messageController.messageComposeDelegate = self;
-                [messageController setRecipients:recipents];
-                [messageController setBody:messageBody];
-
-                
-//                [self.tbl_contacts reloadRowsAtIndexPaths:integer withRowAnimation:UITableViewRowAnimationNone];
-
-                // Present message view controller on screen
-                [self presentViewController:messageController animated:YES completion:^{
-                    //[App StopAnimating];
-                    
-                   // [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-                    self.tbl_contacts.userInteractionEnabled=YES;
-                }];
-            }
         }
         else
         {
             cell.lbl_emailOrPhnNo.text=[arrEmails objectAtIndex:indexPath.row];
 
-            if(![MFMailComposeViewController canSendMail]) {
-
-                UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Sending Emails!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-
-                [warningAlert show];
-
-                return;
-            }
-
-            else
-            {
-                NSMutableArray *toRecipents =[[NSMutableArray alloc]init];
-                [toRecipents addObject:[arrEmails objectAtIndex: indexPath.row]];
-
-                MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-
-                mc.mailComposeDelegate = self;
-
-                NSString *messageBody=[[NSString alloc]init];
-                messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
-                
-                [mc setMessageBody:messageBody isHTML:NO];
-                mc.subject=@"I’m sharing my gift cards with you.";
-                [mc setToRecipients:toRecipents];
-
-
-
-                // Present mail view controller on screen
-
-                [self presentViewController:mc animated:YES completion:^{
-                   // [App StopAnimating];
-                //[self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-
-                    self.tbl_contacts.userInteractionEnabled=YES;
-
-                }];
-
-            }
-
+            [self getSyncCode:[dict valueForKey:@"name"] :[arrEmails objectAtIndex:indexPath.row] :@""];
 
         }
 
     }
     else if(arrPhones.count!=0)
     {
-        cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
+        
+        NSString *str=[[NSString alloc]init];
+        str=[arrPhones objectAtIndex:indexPath.row];
+        NSString *str2=[[NSString alloc]init];
+        str2=[str substringWithRange:NSMakeRange(0, 3)];
+        NSString *str3=[[NSString alloc]init];
+        str3=[str substringWithRange:NSMakeRange(3, 3)];
+        
+        NSString *str4=[[NSString alloc]init];
+        str4=[str substringWithRange:NSMakeRange(6, 4)];
+        
+        cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+        //cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
 
-        if(![MFMessageComposeViewController canSendText]) {
-            [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [warningAlert show];
-            return;
-        }
-        else
-        {
-            NSMutableArray *recipents =[[NSMutableArray alloc]init];
-            [recipents addObject:[arrPhones objectAtIndex: indexPath.row]];
-
-            NSString *messageBody=[[NSString alloc]init];
-            messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
-            
-
-            MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
-            messageController.messageComposeDelegate = self;
-            [messageController setRecipients:recipents];
-            [messageController setBody:messageBody];
-
-            
-
-            // Present message view controller on screen
-            [self presentViewController:messageController animated:YES completion:^{
-                //[App StopAnimating];
-               // [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-
-                self.tbl_contacts.userInteractionEnabled=YES;
-
-            }];
-
-
-        }
+        [self getSyncCode:[dict valueForKey:@"name"] :@"" :[arrPhones objectAtIndex:indexPath.row]];
     }
-
-
 
 
 }
@@ -825,7 +772,7 @@
             
         case MessageComposeResultFailed:
         {
-            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send SMS!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [warningAlert show];
             break;
         }
@@ -862,8 +809,7 @@
             
         case MFMailComposeResultFailed:
         {
-            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send email!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            warningAlert.tag=3;
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send email!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [warningAlert show];
             break;
         }
@@ -924,7 +870,7 @@
     {
         if(![MFMailComposeViewController canSendMail]) {
             
-            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Sending Emails!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Sending Emails!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             
             [warningAlert show];
             
@@ -962,7 +908,7 @@
     {
         if(![MFMessageComposeViewController canSendText]) {
             // [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [warningAlert show];
             return;
         }
@@ -993,47 +939,141 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag==3)
-    {
         if (buttonIndex==0)
         {
-            {
-                UserProfile *up=[[UserProfile alloc]init];
-                up=[UserProfile getProfile];
-                
-                if (self.SelectedPhoneNo.count!=0) {
-                    
-                    if(![MFMessageComposeViewController canSendText]) {
-                        // [cell.btn_send setImage:[UIImage imageNamed:@"ic_add_circle_outline"] forState:UIControlStateNormal];
-                        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        [warningAlert show];
-                        return;
-                    }
-                    else
-                    {
-                        NSMutableArray *recipents =[[NSMutableArray alloc]init];
-                        //[recipents addObject:[arrPhones objectAtIndex: integer]];
-                        [recipents addObjectsFromArray:self.SelectedPhoneNo];
-                        
-                        NSString *messageBody=[[NSString alloc]init];
-                        messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
-                        
-                        MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
-                        messageController.messageComposeDelegate = self;
-                        [messageController setRecipients:recipents];
-                        [messageController setBody:messageBody];
-                        
-                        // Present message view controller on screen
-                        [self presentViewController:messageController animated:YES completion:^{
-                            
-                        }];
-                    }
-                    
-                }
-            }
-
+            self.tbl_contacts.userInteractionEnabled=YES;
+            
+            [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData)
+                                                withObject:nil
+                                             waitUntilDone:NO];
         }
-    }
+}
+
+
+
+-(void)getSyncCode :(NSString*)name :(NSString*)email :(NSString*)phone
+{
+    
+    [self.view endEditing:YES];
+    [self resignFirstResponder];
+    AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AlertView *alert=[[AlertView alloc]init];
+    UserProfile *ud=[[UserProfile alloc]init];
+    ud=[UserProfile getProfile];
+    [App StartAnimating];
+    self.view.userInteractionEnabled=NO;
+    
+    NSDictionary *dict=[[NSDictionary alloc]init];
+    dict=[NSDictionary dictionaryWithObjectsAndKeys:ud.user_access_token,@"access_token",name,@"name",email,@"email",phone,@"phone", nil];
+    
+    [IOSRequest uploadData:Url_getSyncCode parameters:dict imageData:nil success:^(NSDictionary *responseStr)
+     {
+         [App StopAnimating];
+         self.view.userInteractionEnabled=YES;
+         
+         if ([[responseStr valueForKey:@"success"] integerValue]==1)
+         {
+             self.SyncCode=[responseStr valueForKey:@"code"];
+             
+             if (email.length!=0) {
+                 
+                 if(![MFMailComposeViewController canSendMail]) {
+                     
+                     UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Sending Emails!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                     
+                     [warningAlert show];
+                     
+                     return;
+                 }
+                 
+                 else
+                 {
+                     NSMutableArray *toRecipents =[[NSMutableArray alloc]init];
+                     [toRecipents addObject:email];
+                     
+                     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+                     
+                     mc.mailComposeDelegate = self;
+                     
+                     NSString *messageBody=[[NSString alloc]init];
+                     messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",self.SyncCode];
+                     
+                     [mc setMessageBody:messageBody isHTML:NO];
+                     mc.subject=@"I’m sharing my gift cards with you.";
+                     [mc setToRecipients:toRecipents];
+                     
+                     
+                     
+                     // Present mail view controller on screen
+                     
+                     [self presentViewController:mc animated:YES completion:^{
+                         // [App StopAnimating];
+                         //[self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                         
+                         self.tbl_contacts.userInteractionEnabled=YES;
+                         
+                     }];
+                     
+                 }
+
+             }
+             else
+             {
+                 if(![MFMessageComposeViewController canSendText]) {
+                     UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                     [warningAlert show];
+                     return;
+                 }
+                 else
+                 {
+                     
+                     NSMutableArray *recipents =[[NSMutableArray alloc]init];
+                     [recipents addObject:phone];
+                     
+                     
+                     NSString *messageBody=[[NSString alloc]init];
+                     messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",self.SyncCode];
+                     
+                     MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+                     messageController.messageComposeDelegate = self;
+                     [messageController setRecipients:recipents];
+                     [messageController setBody:messageBody];
+                     
+                     
+                     //                [self.tbl_contacts reloadRowsAtIndexPaths:integer withRowAnimation:UITableViewRowAnimationNone];
+                     
+                     // Present message view controller on screen
+                     [self presentViewController:messageController animated:YES completion:^{
+                         //[App StopAnimating];
+                         
+                         // [self.tbl_contacts performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+                         self.tbl_contacts.userInteractionEnabled=YES;
+                     }];
+                 }
+
+             }
+             
+         }
+         else if([[responseStr valueForKey:@"success"]integerValue]==2)
+         {
+             UIAlertView *alert1=[[UIAlertView alloc]initWithTitle:@"" message:@"Token expired! Please login." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+             alert1.tag=2;
+             [alert1 show];
+         }
+         else
+         {
+             [alert showStaticAlertWithTitle:@"" AndMessage:[responseStr valueForKey:@"msg"]];
+         }
+     }
+                   failure:^(NSError *error)
+     {
+         self.view.userInteractionEnabled=YES;
+         [App StopAnimating];
+         
+         [alert showStaticAlertWithTitle:@"" AndMessage:@"Please check your Internet Connection!"];
+     }];
+    
+
 }
 
 //  /////////////////////////////////////////

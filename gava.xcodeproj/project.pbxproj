@@ -31,6 +31,8 @@
 		9B59B5321BD4D04500C741D8 /* FamilyShareTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B59B5311BD4D04500C741D8 /* FamilyShareTableCell.m */; };
 		9B5C00601BA2C35A003FC84C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B5C005F1BA2C35A003FC84C /* CoreLocation.framework */; };
 		9B5C00631BA2D376003FC84C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B5C00611BA2C54D003FC84C /* MapKit.framework */; };
+		9B61FCC41BE8E23C00FDA2F7 /* FirstCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B61FCC31BE8E23C00FDA2F7 /* FirstCell.m */; };
+		9B61FCC71BE8E2F000FDA2F7 /* ThirdCellCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B61FCC61BE8E2F000FDA2F7 /* ThirdCellCollectionViewCell.m */; };
 		9B65AC5E1BE21AB700E440EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B8C42E51BA1B3D30036E797 /* Foundation.framework */; };
 		9B65AC601BE21AC100E440EF /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B65AC5F1BE21AC100E440EF /* CoreFoundation.framework */; };
 		9B6EDC321BD64FE3009233D2 /* ContactsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B6EDC311BD64FE3009233D2 /* ContactsHeaderView.m */; };
@@ -40,6 +42,8 @@
 		9B871DFB1BA972C900D49B03 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B871DF81BA972C900D49B03 /* Roboto-Bold.ttf */; };
 		9B871DFC1BA972C900D49B03 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B871DF91BA972C900D49B03 /* Roboto-Medium.ttf */; };
 		9B871DFD1BA972C900D49B03 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B871DFA1BA972C900D49B03 /* Roboto-Regular.ttf */; };
+		9B877B631BEA1C26003A23CD /* FamilyShareCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B877B621BEA1C26003A23CD /* FamilyShareCell.m */; };
+		9B877B651BEA3ED6003A23CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B877B641BEA3ED6003A23CD /* UIKit.framework */; };
 		9B8C42E61BA1B3D30036E797 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B8C42E51BA1B3D30036E797 /* Foundation.framework */; };
 		9BBE785B1BC005A8000A8F01 /* MapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBE785A1BC005A8000A8F01 /* MapPoint.m */; };
 		9BCD6AB21B9ABB8A005D3559 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BCD6AB11B9ABB8A005D3559 /* LoginViewController.m */; };
@@ -129,6 +133,10 @@
 		9B59B5311BD4D04500C741D8 /* FamilyShareTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FamilyShareTableCell.m; sourceTree = "<group>"; };
 		9B5C005F1BA2C35A003FC84C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9B5C00611BA2C54D003FC84C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		9B61FCC21BE8E23C00FDA2F7 /* FirstCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstCell.h; sourceTree = "<group>"; };
+		9B61FCC31BE8E23C00FDA2F7 /* FirstCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstCell.m; sourceTree = "<group>"; };
+		9B61FCC51BE8E2F000FDA2F7 /* ThirdCellCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdCellCollectionViewCell.h; sourceTree = "<group>"; };
+		9B61FCC61BE8E2F000FDA2F7 /* ThirdCellCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdCellCollectionViewCell.m; sourceTree = "<group>"; };
 		9B63F7411BC6952D00F8BC1D /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		9B65AC5F1BE21AC100E440EF /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		9B6C86CA1BC2950500064F9E /* Quicksand-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quicksand-Bold.ttf"; sourceTree = "<group>"; };
@@ -142,6 +150,9 @@
 		9B871DF81BA972C900D49B03 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		9B871DF91BA972C900D49B03 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		9B871DFA1BA972C900D49B03 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		9B877B611BEA1C26003A23CD /* FamilyShareCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FamilyShareCell.h; sourceTree = "<group>"; };
+		9B877B621BEA1C26003A23CD /* FamilyShareCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FamilyShareCell.m; sourceTree = "<group>"; };
+		9B877B641BEA3ED6003A23CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9B8C42E51BA1B3D30036E797 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9BBE78591BC005A8000A8F01 /* MapPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPoint.h; sourceTree = "<group>"; };
 		9BBE785A1BC005A8000A8F01 /* MapPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPoint.m; sourceTree = "<group>"; };
@@ -188,6 +199,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B877B651BEA3ED6003A23CD /* UIKit.framework in Frameworks */,
 				9B65AC601BE21AC100E440EF /* CoreFoundation.framework in Frameworks */,
 				9B65AC5E1BE21AB700E440EF /* Foundation.framework in Frameworks */,
 			);
@@ -379,6 +391,12 @@
 				9B497FB91B995CCC00124B3F /* FirstViewController.m */,
 				9B497FC71B99725F00124B3F /* imgCollectionCell.h */,
 				9B497FC81B99725F00124B3F /* imgCollectionCell.m */,
+				9B61FCC21BE8E23C00FDA2F7 /* FirstCell.h */,
+				9B61FCC31BE8E23C00FDA2F7 /* FirstCell.m */,
+				9B61FCC51BE8E2F000FDA2F7 /* ThirdCellCollectionViewCell.h */,
+				9B61FCC61BE8E2F000FDA2F7 /* ThirdCellCollectionViewCell.m */,
+				9B877B611BEA1C26003A23CD /* FamilyShareCell.h */,
+				9B877B621BEA1C26003A23CD /* FamilyShareCell.m */,
 			);
 			path = FirstViewController;
 			sourceTree = "<group>";
@@ -545,6 +563,7 @@
 		F6BD89CC12DD5FC7B38A1A74 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B877B641BEA3ED6003A23CD /* UIKit.framework */,
 				9B65AC5F1BE21AC100E440EF /* CoreFoundation.framework */,
 				9B570CE11BC3B8D50005A899 /* QuartzCore.framework */,
 				9B5C00611BA2C54D003FC84C /* MapKit.framework */,
@@ -710,6 +729,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B61FCC71BE8E2F000FDA2F7 /* ThirdCellCollectionViewCell.m in Sources */,
 				9B497FC31B995D1800124B3F /* ForgotPswdViewController.m in Sources */,
 				9B42A6731BD26FC80009FBF8 /* FamilyShareViewController.m in Sources */,
 				9BE024A91BD51912007E5FEB /* SyncGiftCards.m in Sources */,
@@ -724,7 +744,9 @@
 				9B43527A1BBC111800907ADB /* FullScreenMapViewController.m in Sources */,
 				9B497FC61B995D2F00124B3F /* MainViewController.m in Sources */,
 				9B59B52A1BD4C31600C741D8 /* AlertView.m in Sources */,
+				9B61FCC41BE8E23C00FDA2F7 /* FirstCell.m in Sources */,
 				9BD456B41BD4ECE200CA3CB9 /* UserContactsModal.m in Sources */,
+				9B877B631BEA1C26003A23CD /* FamilyShareCell.m in Sources */,
 				9BCD6ABB1B9B008C005D3559 /* AddGiftCardCellTableViewCell.m in Sources */,
 				9B497FBA1B995CCC00124B3F /* FirstViewController.m in Sources */,
 				9BCD6AB81B9B0047005D3559 /* AddGiftCardViewController.m in Sources */,
@@ -803,8 +825,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -824,7 +846,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -847,8 +869,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -861,7 +883,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -874,8 +896,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
 				INFOPLIST_FILE = gava/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -920,7 +942,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
 			};
 			name = Debug;
 		};
@@ -930,8 +952,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
 				INFOPLIST_FILE = gava/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -976,15 +998,15 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
 			};
 			name = Release;
 		};
 		9B497FA01B99555F00124B3F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -996,7 +1018,7 @@
 				INFOPLIST_FILE = gavaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/gava.app/gava";
 			};
 			name = Debug;
@@ -1004,8 +1026,8 @@
 		9B497FA11B99555F00124B3F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1013,7 +1035,7 @@
 				INFOPLIST_FILE = gavaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/gava.app/gava";
 			};
 			name = Release;

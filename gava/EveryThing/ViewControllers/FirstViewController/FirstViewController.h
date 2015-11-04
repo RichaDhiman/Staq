@@ -18,6 +18,9 @@
 #import "MainViewController.h"
 #import "AppDelegate.h"
 #import "AlertView.h"
+#import "FirstCell.h"
+#import "ThirdCellCollectionViewCell.h"
+#import "FamilyShareCell.h"
 
 @interface FirstViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate>
 @property (strong, nonatomic) IBOutlet UIImageView *img_logo;

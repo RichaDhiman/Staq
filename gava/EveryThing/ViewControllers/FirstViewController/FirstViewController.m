@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.navigationController.interactivePopGestureRecognizer setDelegate:self];
-    self.lbl_title.preferredMaxLayoutWidth=200;
+    self.lbl_title.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-40;
     
     if ([[NSUserDefaults standardUserDefaults  ]valueForKey:@"user"]!=nil)
     {
@@ -62,15 +62,20 @@
  */
 -(void)viewHelper
 {
-    self.lbl_title.preferredMaxLayoutWidth=200;
+    self.lbl_title.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-40;
     self.myPageControl.currentPage=0;
 
     self.btn_fbSignUp.layer.cornerRadius=3;
     self.btn_fbSignUp.clipsToBounds=YES;
+    self.btn_fbSignUp.layer.borderWidth=1;
+    self.btn_fbSignUp.layer.borderColor=[[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.8] CGColor];
+   // self.btn_fbSignUp.layer.backgroundColor=[UIColor colorWithRed:<#(CGFloat)#> green:<#(CGFloat)#> blue:<#(CGFloat)#> alpha:<#(CGFloat)#>];
     
     self.btn_email.layer.cornerRadius=3;
     self.btn_email.clipsToBounds=YES;
-    
+    self.btn_email.layer.borderWidth=1;
+    self.btn_email.layer.borderColor=[[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.8] CGColor];
+    //self.btn_email.layer.backgroundColor=[UIColor colorWithRed:<#(CGFloat)#> green:<#(CGFloat)#> blue:<#(CGFloat)#> alpha:<#(CGFloat)#>];
     self.imgsArr=[[NSArray alloc]init];
     self.titlesArr=[[NSArray alloc]init];
     
@@ -85,21 +90,48 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return 4;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 3;
+    return 1;
 }
 
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    imgCollectionCell *cell = (imgCollectionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"imgCollectionCell" forIndexPath:indexPath];
-   
-    [cell cofigureCell:[self.imgsArr objectAtIndex:indexPath.row] :[self.titlesArr objectAtIndex:indexPath.row]];
+    if (indexPath.section==0) {
+        FirstCell *cell = (FirstCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"FirstCell" forIndexPath:indexPath];
+        [cell configureCell:@"target_front" :@"nike_slider" :@"walmart_slider" :@"Store all your gift cards on your mobile device for easy accesss."];
+        
+        
+
+        return cell;
+    }
+    else if(indexPath.section==1)
+    {
+        FamilyShareCell *cell = (FamilyShareCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"FamilyShareCell" forIndexPath:indexPath];
+        [cell configureCell:@"logo_intro4" :@"Socially share your gift cards with family and friends."];
+        
+        return cell;
+    }
+    else if (indexPath.section==2)
+    {
+        imgCollectionCell *cell = (imgCollectionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"imgCollectionCell" forIndexPath:indexPath];
+        [cell configureCell:@"map_slider_new" :@"Find nearby retailers for cards that you have stored in the Eventure wallet."];
+        
+        return cell;
+
+    }
+    else
+    {
+        ThirdCellCollectionViewCell *cell = (ThirdCellCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ThirdCellCollectionViewCell" forIndexPath:indexPath];
+        
+        [cell configureCell:@"target_slider" :@"Use your gift cards and make purchases right in the store from the Eventure wallet."];
+
+        return cell;
+    }
     
-    return cell;
     
 }
 

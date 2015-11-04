@@ -65,7 +65,7 @@ else
   
 
     self.lbl_brandName.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-90;
-    self.lbl_BrandTitle.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-90;
+   // self.lbl_BrandTitle.preferredMaxLayoutWidth=[UIScreen mainScreen].bounds.size.width-90;
 
     // Do any additional setup after loading the view.
 }
@@ -93,7 +93,7 @@ else
      setShowsUserLocation:YES];
     
     [UIView animateWithDuration:0.3 animations:^{
-       // self.cnst_detailsView_botttom.constant=-150;
+        self.cnst_detailsView_botttom.constant=-self.view_detailView.frame.size.height;
         
     } completion:nil];
     self.view_detailView.hidden=YES;
@@ -219,56 +219,48 @@ else
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
     [UIView animateWithDuration:0.3 animations:^{
-        //self.cnst_detailsView_botttom.constant=0;
-        
-        
-        self.view_detailView.hidden=NO;
-        self.lbl_line.hidden=NO;
-        NSLog(@"Tapped on: %@", view.annotation.title);
-        
-        //[self.lbl_BrandTitle setTextAlignment:NSTextAlignmentJustified];
-        
-        [self.lbl_BrandTitle setText:view.annotation.title];
-        
-        //    NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:[view.annotation.title capitalizedString]];
-        //    NSInteger _stringLength=[attString length];
-        //
-        //    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:20.0f] range:NSMakeRange(0, _stringLength)];
-        //    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength)];
-        
-        
-        NSString *str=[[NSString alloc]init];
-        str=view.annotation.subtitle;
-        if (str.length==0) {
-            str=@" ";
-        }
-        
-        NSMutableAttributedString *attString2=[[NSMutableAttributedString alloc] initWithString:str];
-        
-        //NSMutableAttributedString *attString2=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@",str ]];
-        NSInteger _stringLength2=[str length];
-        //Helvetica-Light
-        
-        UIFont *font2=[UIFont fontWithName:@"Helvetica" size:12.0f];
-        [attString2 addAttribute:NSFontAttributeName value:font2 range:NSMakeRange(0, _stringLength2)];
-        [attString2 addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength2)];
-        
-        NSMutableAttributedString *NotiComment = [[NSMutableAttributedString alloc] initWithAttributedString:attString2];
-        
-        //[NotiComment appendAttributedString:attString2];
-        
-        self.lbl_brandName.attributedText = NotiComment;
-        
-        self.DlocPM=[view.annotation coordinate];
-        
-
-    } completion:^(BOOL finished) {
-        [self.view_det_subview layoutIfNeeded];
-        [self.view_detailView layoutIfNeeded];
-    }];
+        self.cnst_detailsView_botttom.constant=0;
+    
+    } completion:nil];
+    
+    self.view_detailView.hidden=NO;
+    self.lbl_line.hidden=NO;
+    NSLog(@"Tapped on: %@", view.annotation.title);
+    
+    //[self.lbl_BrandTitle setTextAlignment:NSTextAlignmentJustified];
+    
+    //[self.lbl_BrandTitle setText:view.annotation.title];
+    
+    NSMutableAttributedString *attString=[[NSMutableAttributedString alloc] initWithString:[view.annotation.title capitalizedString]];
+    NSInteger _stringLength=[attString length];
+    
+    [attString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:20.0f] range:NSMakeRange(0, _stringLength)];
+    [attString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength)];
     
     
+    NSString *str=[[NSString alloc]init];
+    str=view.annotation.subtitle;
+    if (str.length==0) {
+        str=@" ";
+    }
     
+    // NSMutableAttributedString *attString2=[[NSMutableAttributedString alloc] initWithString:str];
+    
+    NSMutableAttributedString *attString2=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@",str ]];
+    NSInteger _stringLength2=[str length];
+    //Helvetica-Light
+    
+    UIFont *font2=[UIFont fontWithName:@"Helvetica" size:12.0f];
+    [attString2 addAttribute:NSFontAttributeName value:font2 range:NSMakeRange(0, _stringLength2+1)];
+    [attString2 addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0] range:NSMakeRange(0, _stringLength2+1)];
+    
+    NSMutableAttributedString *NotiComment = [[NSMutableAttributedString alloc] initWithAttributedString:attString];
+    
+    [NotiComment appendAttributedString:attString2];
+    
+    self.lbl_brandName.attributedText = NotiComment;
+    
+    self.DlocPM=[view.annotation coordinate];
 }
 
 

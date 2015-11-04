@@ -49,7 +49,7 @@
         [alert showStaticAlertWithTitle:@"" AndMessage:@"Turn On Location Services to allow 'STAQ' to determine your location."];
     }
     
-    [self GetCards];
+    [self GetCards:NO];
     [[UIApplication sharedApplication]setStatusBarHidden:NO];
     
     self.alreadyLoading=YES;
@@ -96,15 +96,15 @@
 
 
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    UIView *vi=(UIView *)object;
-    NSLog(@"%f",vi.frame.origin.x);
-    float av=fabsf(vi.frame.origin.x);
-    NSLog(@"%f",av/250);
-    self.img_backimg.alpha=(1-(av/250))*0.6;
-    
-}
+//-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+//{
+//    UIView *vi=(UIView *)object;
+//    NSLog(@"%f",vi.frame.origin.x);
+//    float av=fabsf(vi.frame.origin.x);
+//    NSLog(@"%f",av/250);
+//    self.img_backimg.alpha=(1-(av/250))*0.6;
+//    
+//}
 
 
 
@@ -230,7 +230,14 @@
          if ([[responseStr valueForKey:@"success"]integerValue]==1)
          {
              [CardDetails saveCardsInfo:[responseStr valueForKey:@"cards"]];
-              [self GetCards];
+             if (isLoaderActive==YES) {
+                [self GetCards:NO];
+             }
+             else if(isLoaderActive==NO)
+             {
+                 [self GetCards:YES];
+             }
+             
              [[NSUserDefaults standardUserDefaults]setValue:[responseStr valueForKey:@"total"] forKey:@"total"];
              [[NSUserDefaults standardUserDefaults]synchronize];
              
@@ -279,7 +286,7 @@
 /*!
  *  @brief  Function to fetch Cards
  */
--(void)GetCards
+-(void)GetCards:(BOOL)isreloaded
 {
     self.MyCards=[CardDetails getCardsInfo];
     self.FilteredCards=[[CardDetails getCardsInfo] mutableCopy];
@@ -313,39 +320,22 @@
         }
         
     }
-    
-//    self.UnsortedplacesNames=[[NSArray alloc]init];
-//    self.UnsortedplacesNames=arr;
-//    
-//    self.filteredPlacesNames = [[NSMutableArray alloc] init];
-//    NSSet *set= (NSSet*)[NSOrderedSet orderedSetWithArray:arr];
-//    self.filteredPlacesNames = [[set allObjects] mutableCopy];
-//    
-//    self.UnsortedplacesTypes=[[NSMutableArray alloc]init];
-//    self.UnsortedplacesTypes=arr2;
-//    
-//    self.filteredPlacesTypes= [[NSMutableArray alloc] init];
-//    NSSet *set2= (NSSet*)[NSOrderedSet orderedSetWithArray:arr2];
-//    self.filteredPlacesTypes = [[set2 allObjects] mutableCopy];
-//    
-
-//    self.PlacesNames=[[NSString alloc]init];
-//    self.PlacesNames=[NSString stringWithFormat:@"%@", [self.filteredPlacesNames componentsJoinedByString:@ "|"]] ;
-    
-//    self.PlacesTypes=[[NSString alloc]init];
-//    self.PlacesTypes=[NSString stringWithFormat:@"%@",[self.filteredPlacesTypes componentsJoinedByString:@"|"]];
-    
-    
+   
     
     self.lbl_cards_count.text=[NSString stringWithFormat:@"%lu",(unsigned long)self.MyCards.count ];
     [[NSUserDefaults standardUserDefaults]setValue:self.lbl_cards_count.text forKey:@"NoOfCards"];
     [[NSUserDefaults standardUserDefaults]synchronize];
     
         self.lbl_total.text=[[NSUserDefaults standardUserDefaults]valueForKey:@"total"];
-    //[self.mycollectionView reloadData];
-    [self.mycollectionView performSelectorOnMainThread:@selector(reloadData)
-                                     withObject:nil
-                                  waitUntilDone:NO];
+   // [self.mycollectionView reloadData];
+    
+    if (isreloaded==YES) {
+        
+        [self.mycollectionView performSelectorOnMainThread:@selector(reloadData)
+                                                withObject:nil
+                                             waitUntilDone:NO];
+    }
+    
 
 }
 
@@ -932,6 +922,26 @@
 //    self.img_backimg.userInteractionEnabled=(shouldOpenMenu) ? YES:NO;
 //}
 
+//  /////
+//    self.UnsortedplacesNames=[[NSArray alloc]init];
+//    self.UnsortedplacesNames=arr;
+//
+//    self.filteredPlacesNames = [[NSMutableArray alloc] init];
+//    NSSet *set= (NSSet*)[NSOrderedSet orderedSetWithArray:arr];
+//    self.filteredPlacesNames = [[set allObjects] mutableCopy];
+//
+//    self.UnsortedplacesTypes=[[NSMutableArray alloc]init];
+//    self.UnsortedplacesTypes=arr2;
+//
+//    self.filteredPlacesTypes= [[NSMutableArray alloc] init];
+//    NSSet *set2= (NSSet*)[NSOrderedSet orderedSetWithArray:arr2];
+//    self.filteredPlacesTypes = [[set2 allObjects] mutableCopy];
+//
 
+//    self.PlacesNames=[[NSString alloc]init];
+//    self.PlacesNames=[NSString stringWithFormat:@"%@", [self.filteredPlacesNames componentsJoinedByString:@ "|"]] ;
+
+//    self.PlacesTypes=[[NSString alloc]init];
+//    self.PlacesTypes=[NSString stringWithFormat:@"%@",[self.filteredPlacesTypes componentsJoinedByString:@"|"]];
 
 @end

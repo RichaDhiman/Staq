@@ -10,21 +10,21 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_screen" translatesAutoresizingMaskIntoConstraints="NO" id="rcT-oG-BwT">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch_Screen" translatesAutoresizingMaskIntoConstraints="NO" id="Ymt-2B-ahV">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="rcT-oG-BwT" secondAttribute="trailing" id="2AA-CL-duZ"/>
-                <constraint firstAttribute="bottom" secondItem="rcT-oG-BwT" secondAttribute="bottom" id="3mB-Nn-xKg"/>
-                <constraint firstItem="rcT-oG-BwT" firstAttribute="top" secondItem="78p-An-hfg" secondAttribute="top" id="Og7-eH-lO2"/>
-                <constraint firstItem="rcT-oG-BwT" firstAttribute="leading" secondItem="78p-An-hfg" secondAttribute="leading" id="kxD-0H-lb5"/>
+                <constraint firstItem="Ymt-2B-ahV" firstAttribute="top" secondItem="78p-An-hfg" secondAttribute="top" id="FhS-Sj-8es"/>
+                <constraint firstAttribute="bottom" secondItem="Ymt-2B-ahV" secondAttribute="bottom" id="OlH-1r-7rn"/>
+                <constraint firstAttribute="trailing" secondItem="Ymt-2B-ahV" secondAttribute="trailing" id="cEc-dR-rpr"/>
+                <constraint firstItem="Ymt-2B-ahV" firstAttribute="leading" secondItem="78p-An-hfg" secondAttribute="leading" id="soR-BL-pI7"/>
             </constraints>
-            <point key="canvasLocation" x="322" y="320"/>
+            <point key="canvasLocation" x="322" y="425"/>
         </view>
     </objects>
     <resources>
-        <image name="splash_screen" width="375" height="667"/>
+        <image name="Launch_Screen" width="375" height="667"/>
     </resources>
 </document>

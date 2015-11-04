@@ -14,8 +14,10 @@
  *  @param imgName Name Of the image 
  *  @param title   title of image
  */
--(void)cofigureCell:(NSString*)imgName :(NSString*)title
+-(void)configureCell:(NSString*)imgName :(NSString*)title
 {
+    self.lbl_title.preferredMaxLayoutWidth=[[UIScreen mainScreen] bounds].size.width-60;
+
     self.img_logos.image=[UIImage imageNamed:imgName];
     self.lbl_title.text=title;
 }

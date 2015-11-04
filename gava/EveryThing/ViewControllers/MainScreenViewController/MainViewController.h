@@ -30,8 +30,11 @@
 #import "AddCodeToSyncViewController.h"
 
 @interface MainViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UISearchBarDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,CLLocationManagerDelegate,UIAlertViewDelegate>
-@property (strong, nonatomic) IBOutlet UICollectionView *mycollectionView;
 
+
+
+
+@property (strong, nonatomic) IBOutlet UICollectionView *mycollectionView;
 @property (strong, nonatomic) IBOutlet UIImageView *img_ifNoCard;
 @property (strong, nonatomic) IBOutlet UIImageView *img_addCHere;
 @property (strong, nonatomic) IBOutlet UIButton *btn_wallet;

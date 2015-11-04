@@ -35,7 +35,7 @@
     self.lbl_noResult.hidden=YES;
     [self getBrands:YES];
     self.alreadyLoading=YES;
-    [self getBrandsInfo];
+    [self BrandsInfo:NO];
    
 
     [self.img_footerImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@/%d",Url_pics,[[NSUserDefaults standardUserDefaults]valueForKeyPath:@"custom.minlogo" ],(int)(DISPLAYSCALE*self.img_footerImg.frame.size.width)]] placeholderImage:nil options:SDWebImageTransformAnimatedImage progress:^(NSInteger receivedSize, NSInteger expectedSize)
@@ -111,7 +111,16 @@
                  } completed:nil usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             
             [UserProfile saveBrandsInfo:[responseDict valueForKey:@"brand"]];
-            [self getBrandsInfo];
+            
+            
+            if (isLoaderActive==YES) {
+                   [self BrandsInfo:NO];
+            }
+            else
+            {
+                 [self BrandsInfo:YES];
+            }
+         
             
 
          
@@ -136,16 +145,20 @@
           }];
   }
 
--(void)getBrandsInfo
+-(void)BrandsInfo:(BOOL)isreloaded
 {
     self.MyBrands=[[NSArray alloc]init];
     self.MyBrands=[UserProfile getBrandsInfo];
     self.FilteredBrand=[[UserProfile getBrandsInfo] mutableCopy];
    // [self.tbl_retailers reloadData];
-    [self.tbl_retailers performSelectorOnMainThread:@selector(reloadData)
-                                     withObject:nil
-                                  waitUntilDone:NO];
+    
+    if (isreloaded==YES) {
+        [self.tbl_retailers performSelectorOnMainThread:@selector(reloadData)
+                                             withObject:nil
+                                          waitUntilDone:NO];
 
+    }
+    
 }
 
 
