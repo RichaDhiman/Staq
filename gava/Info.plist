@@ -5,13 +5,13 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>WALLET</string>
+	<string>Eventure Wallet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.codebrewlabs.staq</string>
+	<string>com.eventure.wallet</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -27,7 +27,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb872348239485270</string>
+				<string>fb1598503557078838</string>
 			</array>
 		</dict>
 	</array>
@@ -48,7 +48,7 @@
 		</array>
 	</dict>
 	<key>FacebookAppID</key>
-	<string>872348239485270</string>
+	<string>1598503557078838</string>
 	<key>FacebookDisplayName</key>
 	<string>Gava</string>
 	<key>LSApplicationCategoryType</key>

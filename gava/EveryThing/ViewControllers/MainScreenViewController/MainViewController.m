@@ -46,7 +46,7 @@
     }
     else {
         // show error
-        [alert showStaticAlertWithTitle:@"" AndMessage:@"Turn On Location Services to allow 'STAQ' to determine your location."];
+        [alert showStaticAlertWithTitle:@"" AndMessage:@"Turn On Location Services to allow 'Wallet' to determine your location."];
     }
     
     [self GetCards:NO];
@@ -217,7 +217,6 @@
     UserProfile *ud=[[UserProfile alloc]init];
     ud=[UserProfile getProfile];
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     
     NSDictionary *dict = [NSDictionary dictionary];
        dict=[[NSDictionary alloc]initWithObjectsAndKeys:ud.user_access_token,@"access_token",nil];
@@ -243,7 +242,8 @@
              
             self.lbl_total.text=[[NSUserDefaults standardUserDefaults]valueForKey:@"total"];
          
-         
+            
+             
          }
         else if([[responseStr valueForKey:@"success"]integerValue]==2)
          {
@@ -331,9 +331,25 @@
     
     if (isreloaded==YES) {
         
-        [self.mycollectionView performSelectorOnMainThread:@selector(reloadData)
-                                                withObject:nil
-                                             waitUntilDone:NO];
+        dispatch_async (dispatch_get_main_queue(), ^{
+            
+            [self.mycollectionView performSelectorOnMainThread:@selector(reloadData)
+                                                    withObject:nil
+                                                 waitUntilDone:YES];
+            
+            
+            if ((self.ScrollIndex.length!=0) && (self.mycollectionView.contentSize.height>self.mycollectionView.frame.size.height)) {
+                
+                NSIndexPath *nextItem = [NSIndexPath indexPathForItem:[self.ScrollIndex integerValue] inSection:0];
+                
+                [self.mycollectionView scrollToItemAtIndexPath:nextItem atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+                self.ScrollIndex=@"";
+                
+            }
+
+        });
+        
+
     }
     
 
@@ -356,7 +372,6 @@
     self.view.userInteractionEnabled=NO;
     
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     NSDictionary *dict = [NSDictionary dictionary];
     dict=[[NSDictionary alloc]initWithObjectsAndKeys:up.user_access_token,@"access_token",nil];
     [IOSRequest uploadData:Url_logout parameters:dict imageData:nil success:^(NSDictionary *responseStr)
@@ -413,6 +428,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.MyCards.count;
+    
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -654,7 +670,6 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self.view endEditing:YES];
-    [self resignFirstResponder];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -863,6 +878,29 @@
         NSLog(@"Coming from AddCodeToSyncViewController!");
     }
 }
+
+
+
+//-(void)scrollToLastCell{
+//    //    if ([self.tbl_chat numberOfRowsInSection:0]>1)
+//    //    {
+//    //
+//    //        NSInteger lastRowNumber =[self.tbl_chat numberOfRowsInSection:0]-1;
+//    //        NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
+//    //
+//    //        [self.tbl_chat scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//    //
+//    //
+//    //
+//    //    }
+//    dispatch_async (dispatch_get_main_queue(), ^
+//                    {CGPoint bottomOffset = CGPointMake(0,self.tbl_chat.contentSize.height - self.tbl_chat.bounds.size.height);
+//                        
+//                        if ( bottomOffset.y > 0 ) {
+//                            [self.tbl_chat setContentOffset:bottomOffset animated:NO];
+//                        }
+//                    });
+//}
 
 
 

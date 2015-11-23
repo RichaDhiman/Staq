@@ -14,11 +14,11 @@
  *  @param imgName Name Of the image 
  *  @param title   title of image
  */
--(void)configureCell:(NSString*)imgName :(NSString*)title
+-(void)configureCell:(NSString*)imgName :(NSString*)imgName2 :(NSString*)title
 {
-    self.lbl_title.preferredMaxLayoutWidth=[[UIScreen mainScreen] bounds].size.width-60;
 
     self.img_logos.image=[UIImage imageNamed:imgName];
+    self.img_popup.image=[UIImage imageNamed:imgName2];
     self.lbl_title.text=title;
 }
 @end

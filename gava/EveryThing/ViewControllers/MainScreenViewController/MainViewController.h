@@ -29,7 +29,7 @@
 #import "FamilyShareViewController.h"
 #import "AddCodeToSyncViewController.h"
 
-@interface MainViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UISearchBarDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,CLLocationManagerDelegate,UIAlertViewDelegate>
+@interface MainViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UISearchBarDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,CLLocationManagerDelegate,UIAlertViewDelegate,UIScrollViewDelegate>
 
 
 
@@ -83,4 +83,5 @@
 @property (strong, nonatomic) IBOutlet UIButton *btn_familyShare;
 - (IBAction)btn_familyShare_Pressed:(id)sender;
 
+@property(nonatomic,retain)NSString* ScrollIndex;
 @end

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DEDB818164E9ACF1D05C1C9E"
+               BlueprintIdentifier = "9B12FA161C54E60160A9F84B"
                BuildableName = "libPods-gava-Facebook-iOS-SDK.a"
                BlueprintName = "Pods-gava-Facebook-iOS-SDK"
                ReferencedContainer = "container:Pods.xcodeproj">

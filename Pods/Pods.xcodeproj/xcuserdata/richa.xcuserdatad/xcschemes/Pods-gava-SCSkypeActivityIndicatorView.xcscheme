@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0443F788A4C3FCB8A52DA33E"
+               BlueprintIdentifier = "CFF70BC8D4F169FA67A78BFA"
                BuildableName = "libPods-gava-SCSkypeActivityIndicatorView.a"
                BlueprintName = "Pods-gava-SCSkypeActivityIndicatorView"
                ReferencedContainer = "container:Pods.xcodeproj">

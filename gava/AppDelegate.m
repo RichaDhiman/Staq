@@ -64,6 +64,7 @@
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    
 
 
     //[application setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
@@ -72,6 +73,7 @@
     [Fabric with:@[[Crashlytics class]]];
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                     didFinishLaunchingWithOptions:launchOptions];
+    
     
     return YES;
 }

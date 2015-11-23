@@ -56,7 +56,6 @@
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];
-    [self resignFirstResponder];
 }
 
 -(void)accessaryForDone
@@ -74,7 +73,6 @@
 
 -(void)Accessory_Donebtn_pressed:(UIButton*)btn
 {
-    [self resignFirstResponder];
     [self.view endEditing:YES];
     AlertView *alert1=[[AlertView alloc]init];
     if ([[self ValidateCodeInfo]length]==0) {

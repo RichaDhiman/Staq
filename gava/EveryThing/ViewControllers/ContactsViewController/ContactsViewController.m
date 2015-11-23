@@ -145,18 +145,25 @@
         {
             NSInteger integer;
             integer=indexPath.row-arrEmails.count;
+            if ([[arrPhones objectAtIndex:integer] length]>=10) {
+                NSString *str=[[NSString alloc]init];
+                str=[arrPhones objectAtIndex:integer];
+                NSString *str2=[[NSString alloc]init];
+                str2=[str substringWithRange:NSMakeRange(0, 3)];
+                NSString *str3=[[NSString alloc]init];
+                str3=[str substringWithRange:NSMakeRange(3, 3)];
+                
+                NSString *str4=[[NSString alloc]init];
+                str4=[str substringWithRange:NSMakeRange(6, 4)];
+                
+                cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+            }
+            else
+            {
+                cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
+            }
             
-            NSString *str=[[NSString alloc]init];
-            str=[arrPhones objectAtIndex:integer];
-            NSString *str2=[[NSString alloc]init];
-            str2=[str substringWithRange:NSMakeRange(0, 3)];
-            NSString *str3=[[NSString alloc]init];
-            str3=[str substringWithRange:NSMakeRange(3, 3)];
-            
-            NSString *str4=[[NSString alloc]init];
-            str4=[str substringWithRange:NSMakeRange(6, 4)];
-            
-            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+           
             
             //cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:integer] ];
 
@@ -171,17 +178,25 @@
     }
     else if(arrPhones.count!=0)
     {
-        NSString *str=[[NSString alloc]init];
-        str=[arrPhones objectAtIndex:indexPath.row];
-        NSString *str2=[[NSString alloc]init];
-        str2=[str substringWithRange:NSMakeRange(0, 3)];
-        NSString *str3=[[NSString alloc]init];
-        str3=[str substringWithRange:NSMakeRange(3, 3)];
-        
-        NSString *str4=[[NSString alloc]init];
-        str4=[str substringWithRange:NSMakeRange(6, 4)];
-        
-        cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+        if ([[arrPhones objectAtIndex:indexPath.row] length]>=10) {
+            NSString *str=[[NSString alloc]init];
+            str=[arrPhones objectAtIndex:indexPath.row];
+            NSString *str2=[[NSString alloc]init];
+            str2=[str substringWithRange:NSMakeRange(0, 3)];
+            NSString *str3=[[NSString alloc]init];
+            str3=[str substringWithRange:NSMakeRange(3, 3)];
+            
+            NSString *str4=[[NSString alloc]init];
+            str4=[str substringWithRange:NSMakeRange(6, 4)];
+            
+            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@-%@-%@",str2,str3,str4];
+        }
+        else
+        {
+            cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
+
+        }
+       
         
         //cell.lbl_emailOrPhnNo.text=[NSString stringWithFormat:@"Mobile: %@",[arrPhones objectAtIndex:indexPath.row] ];
         
@@ -519,7 +534,6 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self.view endEditing:YES];
-    [self resignFirstResponder];
 
     
 }
@@ -887,7 +901,7 @@
             mc.mailComposeDelegate = self;
             
             NSString *messageBody=[[NSString alloc]init];
-            messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
+            messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\niPhone: https://goo.gl/GFyu1Z \nAndroid: https://goo.gl/ijN3Cb\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
             
             [mc setMessageBody:messageBody isHTML:NO];
              mc.subject=@"I’m sharing my gift cards with you.";
@@ -919,7 +933,7 @@
             [recipents addObjectsFromArray:self.SelectedPhoneNo];
             
             NSString *messageBody=[[NSString alloc]init];
-            messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
+            messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\niPhone: https://goo.gl/GFyu1Z \nAndroid: https://goo.gl/ijN3Cb\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",up.user_code];
             
             MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
             messageController.messageComposeDelegate = self;
@@ -955,7 +969,6 @@
 {
     
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AlertView *alert=[[AlertView alloc]init];
     UserProfile *ud=[[UserProfile alloc]init];
@@ -996,7 +1009,7 @@
                      mc.mailComposeDelegate = self;
                      
                      NSString *messageBody=[[NSString alloc]init];
-                     messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",self.SyncCode];
+                     messageBody=[NSString stringWithFormat:@"Hey,\nI’m sending you this app so we can share my gift cards.\n\niPhone: https://goo.gl/GFyu1Z \nAndroid: https://goo.gl/ijN3Cb\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",self.SyncCode];
                      
                      [mc setMessageBody:messageBody isHTML:NO];
                      mc.subject=@"I’m sharing my gift cards with you.";
@@ -1032,7 +1045,7 @@
                      
                      
                      NSString *messageBody=[[NSString alloc]init];
-                     messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",self.SyncCode];
+                     messageBody=[NSString stringWithFormat:@"I’m sending you this app so we can share my gift cards.\n\niPhone: https://goo.gl/GFyu1Z \nAndroid: https://goo.gl/ijN3Cb\n\nClick on the Family Share, then the SYNC button, and paste this code:\n%@",self.SyncCode];
                      
                      MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
                      messageController.messageComposeDelegate = self;

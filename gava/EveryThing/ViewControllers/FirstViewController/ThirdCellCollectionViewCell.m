@@ -9,12 +9,12 @@
 #import "ThirdCellCollectionViewCell.h"
 
 @implementation ThirdCellCollectionViewCell
--(void)configureCell:(NSString*)imgName1 :(NSString*)title
+-(void)configureCell:(NSString*)imgName1 :(NSString*)imgName2 :(NSString*)title
 {
-    self.lbl_title.preferredMaxLayoutWidth=[[UIScreen mainScreen] bounds].size.width-60;
-
     self.img_card.image=[UIImage imageNamed:imgName1];
+    self.img_scannerLine.image=[UIImage imageNamed:imgName2];
     self.lbl_title.text=title;
+    
 }
 
 @end

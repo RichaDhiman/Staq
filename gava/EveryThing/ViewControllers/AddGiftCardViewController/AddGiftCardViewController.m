@@ -96,7 +96,6 @@
     }
     AlertView *alert=[[AlertView alloc]init];
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     [IOSRequest fetchJsonData:Url_myBrands success:^(NSDictionary *responseDict) {
          [App StopAnimating];
         self.view.userInteractionEnabled=YES;
@@ -114,11 +113,16 @@
             
             
             if (isLoaderActive==YES) {
+            
+                
                    [self BrandsInfo:NO];
+                [self.tbl_retailers reloadData];
             }
             else
             {
                  [self BrandsInfo:YES];
+                [self.tbl_retailers reloadData];
+
             }
          
             
@@ -201,22 +205,33 @@
 #pragma mark-Search Handling
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    self.mysearchBar.showsCancelButton = YES;
-    NSString* filter = @"%K CONTAINS[cd] %@";
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:filter, @"bDet_name", searchText];
-    self.MyBrands = [[self.FilteredBrand filteredArrayUsingPredicate:predicate] mutableCopy];
-     //  [self.tbl_retailers reloadData];
-    [self.tbl_retailers performSelectorOnMainThread:@selector(reloadData)
-                                     withObject:nil
-                                  waitUntilDone:NO];
     
-    self.lbl_noResult.hidden=(self.MyBrands.count==0)? NO:YES;
+    if (searchText.length == 0) {
+        
+         [self BrandsInfo:YES];
+    }
+    else
+    {
+        self.mysearchBar.showsCancelButton = YES;
+        
+        NSString* filter = @"%K beginswith[c] %@";
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:filter, @"bDet_name", searchText];
+        
+        
+        
+        self.MyBrands = [[self.FilteredBrand filteredArrayUsingPredicate:predicate] mutableCopy];
+        
+        [self.tbl_retailers performSelectorOnMainThread:@selector(reloadData)
+                                             withObject:nil
+                                          waitUntilDone:NO];
+        
+        self.lbl_noResult.hidden=(self.MyBrands.count==0)? NO:YES;
+    }
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self.view endEditing:YES];
-    [self resignFirstResponder];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -263,6 +278,7 @@
         }
     }
 }
+
 /*!
  *  @brief  to check whether scrolling is upward or downward
  *

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9B27B1641BBAAEBB00DF7A85 /* TermsConditons&RedemptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B27B1631BBAAEBB00DF7A85 /* TermsConditons&RedemptionViewController.m */; };
+		9B423AF11C02D7E800C86E42 /* AlertController+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B423AF01C02D7E800C86E42 /* AlertController+Custom.m */; };
 		9B42A6731BD26FC80009FBF8 /* FamilyShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B42A6721BD26FC80009FBF8 /* FamilyShareViewController.m */; };
 		9B43527A1BBC111800907ADB /* FullScreenMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B4352791BBC111800907ADB /* FullScreenMapViewController.m */; };
 		9B497F7C1B99555E00124B3F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B497F7B1B99555E00124B3F /* main.m */; };
@@ -90,6 +91,8 @@
 		5FFAEE5576DCA1A9D07EAB29 /* libPods-gava.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gava.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B27B1621BBAAEBB00DF7A85 /* TermsConditons&RedemptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TermsConditons&RedemptionViewController.h"; sourceTree = "<group>"; };
 		9B27B1631BBAAEBB00DF7A85 /* TermsConditons&RedemptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TermsConditons&RedemptionViewController.m"; sourceTree = "<group>"; };
+		9B423AEF1C02D7E800C86E42 /* AlertController+Custom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AlertController+Custom.h"; sourceTree = "<group>"; };
+		9B423AF01C02D7E800C86E42 /* AlertController+Custom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AlertController+Custom.m"; sourceTree = "<group>"; };
 		9B42A6711BD26FC80009FBF8 /* FamilyShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FamilyShareViewController.h; sourceTree = "<group>"; };
 		9B42A6721BD26FC80009FBF8 /* FamilyShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FamilyShareViewController.m; sourceTree = "<group>"; };
 		9B4352781BBC111800907ADB /* FullScreenMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenMapViewController.h; sourceTree = "<group>"; };
@@ -226,6 +229,15 @@
 			path = "TermsConditions&RedemptionViewController";
 			sourceTree = "<group>";
 		};
+		9B423AEB1C02D76900C86E42 /* AlertController */ = {
+			isa = PBXGroup;
+			children = (
+				9B423AEF1C02D7E800C86E42 /* AlertController+Custom.h */,
+				9B423AF01C02D7E800C86E42 /* AlertController+Custom.m */,
+			);
+			path = AlertController;
+			sourceTree = "<group>";
+		};
 		9B42A6701BD26F8C0009FBF8 /* FamilyShareViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +252,7 @@
 		9B4352731BBBFA2700907ADB /* Common Functions */ = {
 			isa = PBXGroup;
 			children = (
+				9B423AEB1C02D76900C86E42 /* AlertController */,
 				9B59B5211BD4C31600C741D8 /* AlertView */,
 				9B59B5241BD4C31600C741D8 /* Animation */,
 				9B59B5271BD4C31600C741D8 /* PhoneBook */,
@@ -746,6 +759,7 @@
 				9B59B52A1BD4C31600C741D8 /* AlertView.m in Sources */,
 				9B61FCC41BE8E23C00FDA2F7 /* FirstCell.m in Sources */,
 				9BD456B41BD4ECE200CA3CB9 /* UserContactsModal.m in Sources */,
+				9B423AF11C02D7E800C86E42 /* AlertController+Custom.m in Sources */,
 				9B877B631BEA1C26003A23CD /* FamilyShareCell.m in Sources */,
 				9BCD6ABB1B9B008C005D3559 /* AddGiftCardCellTableViewCell.m in Sources */,
 				9B497FBA1B995CCC00124B3F /* FirstViewController.m in Sources */,
@@ -825,8 +839,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -846,7 +860,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
+				PROVISIONING_PROFILE = "6374fb3b-588d-4f7e-a717-2b25b646c200";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -869,8 +883,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -883,7 +897,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
+				PROVISIONING_PROFILE = "6374fb3b-588d-4f7e-a717-2b25b646c200";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -896,8 +910,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
 				INFOPLIST_FILE = gava/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -942,7 +956,8 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
+				PROVISIONING_PROFILE = "6374fb3b-588d-4f7e-a717-2b25b646c200";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -952,8 +967,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
 				INFOPLIST_FILE = gava/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -998,15 +1013,16 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
+				PROVISIONING_PROFILE = "6374fb3b-588d-4f7e-a717-2b25b646c200";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		9B497FA01B99555F00124B3F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1018,7 +1034,7 @@
 				INFOPLIST_FILE = gavaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
+				PROVISIONING_PROFILE = "6374fb3b-588d-4f7e-a717-2b25b646c200";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/gava.app/gava";
 			};
 			name = Debug;
@@ -1026,8 +1042,8 @@
 		9B497FA11B99555F00124B3F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Seven Islands Holding Company LLC (M7DRGZQK22)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gannon Giguiere (729TG759ZP)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1035,7 +1051,7 @@
 				INFOPLIST_FILE = gavaTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e4bdc3d3-a1c9-4129-bbef-1fea9e6f74a8";
+				PROVISIONING_PROFILE = "6374fb3b-588d-4f7e-a717-2b25b646c200";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/gava.app/gava";
 			};
 			name = Release;

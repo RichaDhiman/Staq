@@ -16,8 +16,8 @@
 //#define server @"http://192.168.2.128:8000/apiv1/"
 //#define Url_pics @"http://localhost:8000/apiv1/photos/thumb/"
 
-#define server @"http://54.149.202.171/apiv1/"
-#define Url_pics @"http://54.149.202.171/apiv1/photos/thumb/"
+#define server @"http://api.wallet.eventure.com/apiv1/"
+#define Url_pics @"http://api.wallet.eventure.com/apiv1/photos/thumb/"
 
 #define ApiKey @"AIzaSyCMVGDL95tanEFIgO9S_SpdnbxSShdEqHk"
 

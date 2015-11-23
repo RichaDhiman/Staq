@@ -64,7 +64,6 @@
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AlertView *alert=[[AlertView alloc]init];
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     if ([[self ValidateSignupInfo] length]==0)
     {
         [App StartAnimating];

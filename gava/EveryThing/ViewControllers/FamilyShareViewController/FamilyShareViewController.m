@@ -8,13 +8,14 @@
 
 #import "FamilyShareViewController.h"
 
-@interface FamilyShareViewController ()
+@interface FamilyShareViewController ()<UIAlertViewDelegate>
 @property(nonatomic,retain)UIPanGestureRecognizer *panGestureRecognizer;
 @property(nonatomic,retain)NSArray *SyncFriends;
 @property(nonatomic,retain)NSMutableArray* filteredPlacesNames;
 @property(nonatomic,retain)NSMutableArray* filteredPlacesTypes;
 @property(nonatomic,retain)NSMutableArray *Names;
 @property(nonatomic,retain)NSArray *MyCards;
+@property (nonatomic,strong)FamilyShareTableCell *cellFamily;
 
 @end
 
@@ -85,7 +86,6 @@
 -(void)getSyncApiHit
 {
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AlertView *alert=[[AlertView alloc]init];
     UserProfile *ud=[[UserProfile alloc]init];
@@ -363,6 +363,7 @@
     
     // SCLAlertView *alert=[[SCLAlertView alloc]init];
     UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"" message:@"Do you want to sign out?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+    alert.tag = 55;
     [alert show];
 
 }
@@ -399,6 +400,9 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
+    
+    if (alertView.tag==55) {
+        
     if (alertView.tag==2)
     {
         if (buttonIndex==0)
@@ -412,6 +416,7 @@
         {
             [self IsSignout];
         }
+    }
     }
     
 }
@@ -444,7 +449,6 @@
     self.view.userInteractionEnabled=NO;
     
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     NSDictionary *dict = [NSDictionary dictionary];
     dict=[[NSDictionary alloc]initWithObjectsAndKeys:up.user_access_token,@"access_token",nil];
     [IOSRequest uploadData:Url_logout parameters:dict imageData:nil success:^(NSDictionary *responseStr)
@@ -504,7 +508,9 @@
 {
     FamilyShareTableCell *cell=[tableView dequeueReusableCellWithIdentifier:@"FamilyShareTableCell" forIndexPath:indexPath];
     
+
     [cell setRightUtilityButtons:[self rightButtons] WithButtonWidth:85.0f];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate =self;
     cell.tag=indexPath.row;
     
@@ -537,62 +543,97 @@
 }
 - (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
 {
-    FamilyShareTableCell *cell1=(FamilyShareTableCell*)cell;
     
     if (index==0)
     {
+        FamilyShareTableCell *cell1=(FamilyShareTableCell*)cell;
+        _cellFamily = [[FamilyShareTableCell alloc]init];
+        _cellFamily = cell1;
         
-        [self.view endEditing:YES];
-        [self resignFirstResponder];
-        AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
-        AlertView *alert=[[AlertView alloc]init];
-        UserProfile *ud=[[UserProfile alloc]init];
-        ud=[UserProfile getProfile];
+    UIAlertView *alert =  [[UIAlertView alloc]initWithTitle:@"" message:@"Removing this person will also delete all cards shared with this person." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
+        alert.tag = 33;
+        [alert show];
+        
+    }
+    
+}
+
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 33) {
+        
+    if (buttonIndex == 1) {
+        
+        [self deleteUser:_cellFamily];
         
         
-        UserProfile *fd=[[UserProfile alloc]init];
-        fd=[self.SyncFriends objectAtIndex:cell1.tag];
-        
-        [App StartAnimating];
-        self.view.userInteractionEnabled=NO;
-        
-        NSDictionary *dict=[[NSDictionary alloc]init];
-        dict=[NSDictionary dictionaryWithObjectsAndKeys:ud.user_access_token,@"access_token",fd.user_id,@"other_id", nil];
-        
-        [IOSRequest uploadData:Url_UnsyncUsers parameters:dict imageData:nil success:^(NSDictionary *responseStr)
-         {
-             [App StopAnimating];
-             self.view.userInteractionEnabled=YES;
-             
-             if ([[responseStr valueForKey:@"success"] integerValue]==1)
-             {
-                 [UserProfile saveSyncFrndsInfo:[responseStr valueForKey:@"users"]];
-                 [self getSyncFrnds];
-                 
-                 [CardDetails saveCardsInfo:[responseStr valueForKey:@"cards"]];
-                 [self GetCards];
-                 [[NSUserDefaults standardUserDefaults]setValue:[responseStr valueForKey:@"total"] forKey:@"total"];
-                 [self.lbl_total setText:[responseStr valueForKey:@"total"]];
-                 
-             }
-             else if([[responseStr valueForKey:@"success"]integerValue]==2)
-             {
-                 UIAlertView *alert1=[[UIAlertView alloc]initWithTitle:@"" message:@"Token expired! Please login." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                 alert1.tag=2;
-                 [alert1 show];
-             }
-         }
-                       failure:^(NSError *error)
-         {
-             self.view.userInteractionEnabled=YES;
-             [App StopAnimating];
-             
-             [alert showStaticAlertWithTitle:@"" AndMessage:@"Please check your Internet Connection!"];
-         }];
-        
-        [cell hideUtilityButtonsAnimated:YES];
+    }
+    else
+    {
+        [_cellFamily hideUtilityButtonsAnimated:YES];
+    }
     }
 }
+
+-(void)deleteUser:(FamilyShareTableCell * )cell1
+{
+    
+    
+    [self.view endEditing:YES];
+    AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
+    AlertView *alert=[[AlertView alloc]init];
+    UserProfile *ud=[[UserProfile alloc]init];
+    ud=[UserProfile getProfile];
+    
+    
+    UserProfile *fd=[[UserProfile alloc]init];
+    fd=[self.SyncFriends objectAtIndex:cell1.tag];
+    
+    [App StartAnimating];
+    self.view.userInteractionEnabled=NO;
+    
+    NSDictionary *dict=[[NSDictionary alloc]init];
+    dict=[NSDictionary dictionaryWithObjectsAndKeys:ud.user_access_token,@"access_token",fd.user_id,@"other_id", nil];
+    
+    [IOSRequest uploadData:Url_UnsyncUsers parameters:dict imageData:nil success:^(NSDictionary *responseStr)
+     {
+         [App StopAnimating];
+         self.view.userInteractionEnabled=YES;
+         
+         if ([[responseStr valueForKey:@"success"] integerValue]==1)
+         {
+             [UserProfile saveSyncFrndsInfo:[responseStr valueForKey:@"users"]];
+             [self getSyncFrnds];
+             
+             [CardDetails saveCardsInfo:[responseStr valueForKey:@"cards"]];
+             [self GetCards];
+             [[NSUserDefaults standardUserDefaults]setValue:[responseStr valueForKey:@"total"] forKey:@"total"];
+             [self.lbl_total setText:[responseStr valueForKey:@"total"]];
+             
+         }
+         else if([[responseStr valueForKey:@"success"]integerValue]==2)
+         {
+             UIAlertView *alert1=[[UIAlertView alloc]initWithTitle:@"" message:@"Token expired! Please login." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+             alert1.tag=2;
+             [alert1 show];
+         }
+     }
+                   failure:^(NSError *error)
+     {
+         self.view.userInteractionEnabled=YES;
+         [App StopAnimating];
+         
+         [alert showStaticAlertWithTitle:@"" AndMessage:@"Please check your Internet Connection!"];
+     }];
+    
+    [cell1 hideUtilityButtonsAnimated:YES];
+}
+
+
+
+
 - (BOOL)swipeableTableViewCell:(FamilyShareTableCell *)cell canSwipeToState:(SWCellState)state
 {
     return YES;

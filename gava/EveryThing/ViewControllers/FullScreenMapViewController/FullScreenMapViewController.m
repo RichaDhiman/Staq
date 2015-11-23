@@ -18,6 +18,9 @@
 
 
 @interface FullScreenMapViewController ()
+{
+    BOOL IsfirstTime;
+}
 @property(nonatomic,retain)NSMutableArray *GoogleLocs;
 @property(nonatomic)CLLocationCoordinate2D DlocPM;
 
@@ -29,14 +32,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
   
-    
+    if (self.CmngFromParGiftCrd==YES) {
+        self.view_detailView.hidden=NO;
+    }
+    else
+    {
+           _view_detailView.hidden = YES;
+    }
+
+    IsfirstTime = YES;
     if([CLLocationManager locationServicesEnabled] &&
        [CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         // show the map
     }
 else
 {
-     UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"" message:@"Turn On Location Services to allow 'STAQ' to determine your location." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+     UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"" message:@"Turn On Location Services to allow 'Wallet' to determine your location." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     alert.tag=3;
     [alert show];
 }
@@ -218,9 +229,25 @@ else
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
+    
+    if (self.CmngFromParGiftCrd==YES) {
+        
+        self.view_detailView.hidden=YES;
+    }
+    else
+    {
+            if (IsfirstTime == YES) {
+        
+                IsfirstTime = NO;
+                return;
+            }
+    }
+    
+    
+    
     [UIView animateWithDuration:0.3 animations:^{
         self.cnst_detailsView_botttom.constant=0;
-    
+        
     } completion:nil];
     
     self.view_detailView.hidden=NO;
@@ -374,6 +401,8 @@ else
          // self.GoogleLocs=[responseDict valueForKey:@"results"];
          [self.GoogleLocs addObjectsFromArray:[responseDict valueForKey:@"results"]];
          [self plotPositions:[responseDict valueForKey:@"results"]];
+         
+         [self centerMap];
      } failure:^(NSError *error) {
          
      }];
@@ -382,6 +411,8 @@ else
 -(void)plotPositions:(NSArray *)data {
     // 1 - Remove any existing custom annotations but not the user location blue dot.
     
+    
+
     if (!self.cmngFromMainViewController==YES) {
         
         for (id<MKAnnotation> annotation in self.myMapView.annotations) {
@@ -394,7 +425,7 @@ else
     
     if([self.GoogleLocs count]==0)
     {
-        [self.myMapView setCenterCoordinate:self.locationManager.location.coordinate];
+        [self.myMapView setCenterCoordinate:self.locationManager.location.coordinate animated:YES];
         
     }
     else
@@ -426,7 +457,7 @@ else
                 MKCoordinateSpan zoom;
                 zoom.latitudeDelta = .1f; //the zoom level in degrees
                 zoom.longitudeDelta = .1f;//the zoom level in degrees
-                [self.myMapView setCenterCoordinate:[placeObject coordinate] animated:YES];
+                [self.myMapView setCenterCoordinate:self.locationManager.location.coordinate animated:YES];
                 MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([placeObject  coordinate],500, 500);
                 region.span=zoom;
                 [self.myMapView setRegion:region];
@@ -456,6 +487,18 @@ else
         return annotationView;
     } 
     return nil;
+}
+
+-(void)centerMap
+{
+    MKCoordinateSpan zoom;
+    zoom.latitudeDelta = .1f; //the zoom level in degrees
+    zoom.longitudeDelta = .1f;//the zoom level in degrees
+    [self.myMapView setCenterCoordinate:[self.locationManager.location coordinate] animated:YES];
+    
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([self.locationManager.location  coordinate], 200, 200);
+    region.span=zoom;
+    [self.myMapView setRegion:region];
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex

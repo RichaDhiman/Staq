@@ -66,6 +66,12 @@
 #define COCOAPODS_VERSION_MINOR_Bolts_Tasks 3
 #define COCOAPODS_VERSION_PATCH_Bolts_Tasks 0
 
+// CAAnimationBlocks
+#define COCOAPODS_POD_AVAILABLE_CAAnimationBlocks
+#define COCOAPODS_VERSION_MAJOR_CAAnimationBlocks 0
+#define COCOAPODS_VERSION_MINOR_CAAnimationBlocks 0
+#define COCOAPODS_VERSION_PATCH_CAAnimationBlocks 1
+
 // Cocoa-Touch-Barcodes
 #define COCOAPODS_POD_AVAILABLE_Cocoa_Touch_Barcodes
 #define COCOAPODS_VERSION_MAJOR_Cocoa_Touch_Barcodes 0

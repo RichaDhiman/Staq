@@ -12,6 +12,13 @@
 @property (strong, nonatomic) IBOutlet UIImageView *img_familyShare;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_title;
 
--(void)configureCell:(NSString*)imgsName :(NSString*)title;
+@property BOOL hasAnimated;
+-(void)configureCell:(NSString*)imgName1 :(NSString*)imgName2 :(NSString*)imgName3 :(NSString*)title;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *cnst_trailing;
+
+@property (strong, nonatomic) IBOutlet UIImageView *imgPer1;
+@property (strong, nonatomic) IBOutlet UIImageView *imgPer3;
+@property (strong, nonatomic) IBOutlet UIImageView *imgPer2;
+
 
 @end

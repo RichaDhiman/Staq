@@ -93,7 +93,6 @@
 -(void)forgotPswdApiHit
 {
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     
     AlertView *alert=[[AlertView alloc]init];

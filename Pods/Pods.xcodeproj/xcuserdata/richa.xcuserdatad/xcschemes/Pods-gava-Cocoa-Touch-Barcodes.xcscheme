@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B518E00F9E7DF8DE1D03AC80"
+               BlueprintIdentifier = "CB44730CB907BDFCCB552E91"
                BuildableName = "libPods-gava-Cocoa-Touch-Barcodes.a"
                BlueprintName = "Pods-gava-Cocoa-Touch-Barcodes"
                ReferencedContainer = "container:Pods.xcodeproj">

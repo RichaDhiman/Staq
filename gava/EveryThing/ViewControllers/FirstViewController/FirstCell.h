@@ -10,8 +10,11 @@
 
 @interface FirstCell : UICollectionViewCell
 -(void)configureCell:(NSString*)imgName1 :(NSString*)imgName2 :(NSString*)imgName3 :(NSString*)title;
-@property (strong, nonatomic) IBOutlet UIView *view_imgs_back;
 
+-(void)configureCell:(NSString*)imgsName :(NSString*)title;
+
+@property (strong, nonatomic) IBOutlet UIView *view_imgs_back;
+@property BOOL hasAnimated;
 
 @property (strong, nonatomic) IBOutlet UIImageView *last_img;
 @property (strong, nonatomic) IBOutlet UIImageView *Sec_img;

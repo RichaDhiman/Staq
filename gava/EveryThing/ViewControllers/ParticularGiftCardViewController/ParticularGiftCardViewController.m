@@ -74,7 +74,7 @@
     } 
     else
     {
-        [alert showStaticAlertWithTitle:@"" AndMessage:@"Turn On Location Services to allow 'STAQ' to determine your location."];
+        [alert showStaticAlertWithTitle:@"" AndMessage:@"Turn On Location Services to allow 'Wallet' to determine your location."];
     }
     
     self.alreadyRefreshing=NO;
@@ -158,7 +158,6 @@
     
     if ([[self ValidateEditInfo]length]==0) {
         [self editBalApiHit];
-        [self.view resignFirstResponder];
         [self.view endEditing:YES];
     }
     else
@@ -168,7 +167,6 @@
         [alert show];
         
         
-        [self.view resignFirstResponder];
         [self.view endEditing:YES];
     }
 
@@ -349,7 +347,6 @@
 -(void)delCard
 {
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AlertView *alert=[[AlertView alloc]init];
     UserProfile *ud=[[UserProfile alloc]init];
@@ -464,7 +461,6 @@
     UserProfile *ud=[[UserProfile alloc]init];
     ud=[UserProfile getProfile];
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     
     
     NSString *str=[[NSString alloc]init];
@@ -537,7 +533,6 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
-    [self.view resignFirstResponder];
 }
 -(void)refreshApiHit
 {
@@ -555,7 +550,6 @@
     UserProfile *ud=[[UserProfile alloc]init];
     ud=[UserProfile getProfile];
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     NSDictionary *dict=[[NSDictionary alloc]init];
     dict=[NSDictionary dictionaryWithObjectsAndKeys:ud.user_access_token,@"access_token",self.cdet.card_number,@"card_number",self.cdet.brandDet.bDet_brand_id,@"brand_id",self.cdet.card_id,@"id",self.cdet.card_is_custom,@"is_custom",nil];
     
@@ -1030,13 +1024,11 @@
         
         if ([[self ValidateEditInfo]length]==0) {
             [self editBalApiHit];
-            [self.view resignFirstResponder];
             [self.view endEditing:YES];
         }
         else
         {
             [alert showStaticAlertWithTitle:@"" AndMessage:[self ValidateEditInfo]];
-            [self.view resignFirstResponder];
             [self.view endEditing:YES];
         }
         

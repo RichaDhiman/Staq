@@ -1,4 +1,4 @@
-//
+ //
 //  AddCardInfoViewController.m
 //  gava
 //
@@ -15,6 +15,7 @@
 @property(nonatomic,strong)UIView* AccessoryView;
 @property(nonatomic,retain)UITextField *activeField;
 @property(nonatomic)BOOL flagForNext;
+@property(nonatomic,retain)NSString * tempScrollIndex;
 @end
 
 @implementation AddCardInfoViewController
@@ -128,20 +129,26 @@
 -(void)saveInfo
 {
     AppDelegate *App=[UIApplication sharedApplication].delegate;
-    [self.view endEditing:YES];
-    [self resignFirstResponder];
+        
     UserProfile *ud=[[UserProfile alloc]init];
+    
     ud=[UserProfile getProfile];
     NSDictionary *dict = [NSDictionary dictionary];
-   // SCLAlertView *alert=[[SCLAlertView alloc]init];
     AlertView *alert=[[AlertView alloc]init];
+      [self.view endEditing:YES];
+    
         if ([[self ValidateCardInfo]length]==0)
     {
         [App StartAnimating];
         self.lbl_verify.hidden=NO;
         self.view.userInteractionEnabled=NO;
+
+        [self.tf_cardNumber resignFirstResponder];
+        [self.tf_pinNumber resignFirstResponder];
+        [self.tf_remainingBal resignFirstResponder];
+        [self.tf_brandName resignFirstResponder];
+        [self.view endEditing:YES];
         
-       
         
         if (self.is_OtherBrand==YES) {
             
@@ -191,10 +198,19 @@
              {
                  UIStoryboard *mainStoryboard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
                  MainViewController *controller=[mainStoryboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+                 
+//                 [[NSUserDefaults standardUserDefaults]setValue:[responseStr valueForKey:@"card_index"] forKey:@"card_index"];
+//                 [[NSUserDefaults standardUserDefaults] synchronize];
+                 
+                   controller.ScrollIndex=[[responseStr valueForKey:@"card_index"]stringValue];
+                 
                    [self.navigationController pushViewController:controller animated:YES];
+                 
+                 
              }
              else if([[responseStr valueForKey:@"success"]integerValue]==2)
              {
+                 
                  UIAlertView *alert1=[[UIAlertView alloc]initWithTitle:@"" message:@"Token expired! Please login." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                  alert1.tag=2;
                  [alert1 show];
@@ -202,7 +218,20 @@
              else if ([[responseStr valueForKey:@"success"]integerValue]==3)
              {
 
-                 [alert showStaticAlertWithTitle:@"" AndMessage:[responseStr valueForKey:@"msg"]];
+                // [alert showStaticAlertWithTitle:@"" AndMessage:[responseStr valueForKey:@"msg"]];
+                 
+//                 [[NSUserDefaults standardUserDefaults]setValue:[responseStr valueForKey:@"card_index"] forKey:@"card_index"];
+//                 [[NSUserDefaults standardUserDefaults] synchronize];
+                 
+                 self.tempScrollIndex=[[NSString alloc]init];
+                 self.tempScrollIndex=[[responseStr valueForKey:@"card_index"] stringValue];
+
+                 UIAlertView *alert3=[[UIAlertView alloc]initWithTitle:@"" message:[responseStr valueForKey:@"msg"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                 alert3.tag=3;
+                 [alert3 show];
+                 
+
+                 
             }
              else if([[responseStr valueForKey:@"success"]integerValue]==4){
                  [alert showStaticAlertWithTitle:@"Invalid Card Info" AndMessage:@"Please check to make sure all the numbers and pin/access code are correct."];
@@ -224,7 +253,19 @@
     }
     else
     {
-        [alert showStaticAlertWithTitle:@"" AndMessage:[self ValidateCardInfo]];
+       // [alert showStaticAlertWithTitle:@"" AndMessage:[self ValidateCardInfo]];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[self ValidateCardInfo] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+//        UIAlertView *alert5=[[UIAlertView alloc]initWithTitle:@"" message:[self ValidateCardInfo] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//        alert5.tag=5;
+//        [alert5 show];
+       // [self.view endEditing:YES];
+                             
     }
 }
 
@@ -246,7 +287,7 @@
         {
             str=@"Please enter a valid Card Number";
         }
-        else if(self.tf_remainingBal.text.length==0)
+        else if(self.tf_remainingBal.text.length==0||self.tf_remainingBal.text.length==1)
         {
             str=@"Please enter Balance Remaining ";
         }
@@ -271,7 +312,7 @@
         {
             str=@"Please enter a valid Card Number";
         }
-        else if(self.tf_remainingBal.text.length==0)
+        else if(self.tf_remainingBal.text.length==0||self.tf_remainingBal.text.length==1)
         {
             str=@"Please enter Balance Remaining ";
         }
@@ -343,14 +384,20 @@
 }
 
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField;
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    self. activeField=textField;
+    self.activeField=textField;
+    
     if (self.is_OtherBrand==YES) {
         if (textField==self.tf_brandName) {
             [self accessaryForNext];
         }
-        else if (self.activeField==self.tf_cardNumber || self.activeField==self.tf_pinNumber)
+        else if (textField==self.tf_cardNumber)
+        {
+            self.flagForNext=NO;
+            [self accessaryForNext];
+        }
+        else if (textField==self.tf_pinNumber)
         {
             [self accessaryForNext];
         }
@@ -361,10 +408,17 @@
 
     }
     else if ([self.Brand_is_valid isEqualToString:@"0"]||[self.BrandName isEqualToString:@"Target"]) {
-        if (self.activeField==self.tf_cardNumber || self.activeField==self.tf_pinNumber)
+        
+       if (textField==self.tf_cardNumber)
+        {
+            self.flagForNext=NO;
+            [self accessaryForNext];
+        }
+        else if (textField==self.tf_pinNumber)
         {
             [self accessaryForNext];
         }
+
         else{
             if ([self.BrandName isEqualToString:@"Target"]) {
                       [self accessaryForDone];
@@ -381,7 +435,7 @@
     
        else{
        
-           if (self.activeField==self.tf_cardNumber)
+           if (textField==self.tf_cardNumber)
            {
                [self accessaryForNext];
            }
@@ -430,12 +484,18 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
-    [self resignFirstResponder];
 }
 
 - (IBAction)btn_done2_pressed:(id)sender
 {
+//    [self.tf_cardNumber resignFirstResponder];
+//    [self.tf_pinNumber resignFirstResponder];
+//    [self.tf_remainingBal resignFirstResponder];
+//    [self.tf_brandName resignFirstResponder];
+    
+   
     [self saveInfo];
+    [self.view endEditing:YES];
 }
 
 /*!
@@ -460,6 +520,11 @@
 {
 //    [self.tf_cardNumber resignFirstResponder];
 //    [self.tf_pinNumber resignFirstResponder];
+//    [self.tf_remainingBal resignFirstResponder];
+//    [self.tf_brandName resignFirstResponder];
+    
+    [self.view endEditing:YES];
+
     [self saveInfo];
 }
 
@@ -486,11 +551,31 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
+    
+    
     if (alertView.tag==2)
     {
         if (buttonIndex==0)
         {
             [self MoveToRootView];
+        }
+    }
+    else if (alertView.tag==3)
+    {
+        if (buttonIndex==0)
+        {
+            UIStoryboard *mainStoryboard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            MainViewController *controller=[mainStoryboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+            
+            controller.ScrollIndex=self.tempScrollIndex;
+            [self.navigationController pushViewController:controller animated:YES];
+        }
+    }
+    else if(alertView.tag==5)
+    {
+        if (buttonIndex==0)
+        {
+            [self.view endEditing:YES];
         }
     }
 }

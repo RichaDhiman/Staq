@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AlertView.h"
 #import "IOSRequest.h"
 #import "Constants.h"
 #import "MainViewController.h"

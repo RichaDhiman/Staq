@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4C8DD1300D48EFBD217356C0"
+               BlueprintIdentifier = "750D3FE3152CBDF0FB680256"
                BuildableName = "MaterialDesignSpinner.bundle"
                BlueprintName = "MaterialDesignSpinner"
                ReferencedContainer = "container:Pods.xcodeproj">

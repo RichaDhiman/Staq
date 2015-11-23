@@ -13,7 +13,7 @@ pod 'ZXingObjC', '~> 3.0'
 pod 'Facebook-iOS-SDK'
 pod 'SWTableViewCell', '~> 0.3.7'
 pod 'SVPullToRefresh'
-
+pod 'CAAnimationBlocks'
 pod 'Fabric'
 pod 'Crashlytics'
 

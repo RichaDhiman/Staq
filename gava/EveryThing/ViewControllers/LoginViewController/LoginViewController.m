@@ -119,7 +119,6 @@
     self.view.userInteractionEnabled=NO;
     
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     NSArray *myArray = [self.fb_name componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]];
     NSString *str1=[myArray objectAtIndex:0];
     NSString*str2=[myArray lastObject];
@@ -165,7 +164,6 @@
     self.view.userInteractionEnabled=NO;
     
     [self.view endEditing:YES];
-    [self resignFirstResponder];
     NSDictionary *dict = [NSDictionary dictionary];
     AlertView *alert=[[AlertView alloc]init];
     
@@ -200,7 +198,6 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
-    [self.view resignFirstResponder];
 }
 
 /*!
