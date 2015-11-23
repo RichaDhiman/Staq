@@ -256,7 +256,7 @@
        // [alert showStaticAlertWithTitle:@"" AndMessage:[self ValidateCardInfo]];
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[self ValidateCardInfo] preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             
         }]];
         [self presentViewController:alert animated:YES completion:nil];

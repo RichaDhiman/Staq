@@ -81,7 +81,12 @@
     }
     else
     {
-        [alert1 showStaticAlertWithTitle:@"" AndMessage:[self ValidateCodeInfo]];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[self ValidateCodeInfo] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+       // [alert1 showStaticAlertWithTitle:@"" AndMessage:[self ValidateCodeInfo]];
     }
 
 }
@@ -164,7 +169,7 @@
     if (textField==self.tf_code) {
         [self.tf_code resignFirstResponder];
         [self.view endEditing:YES];
-        AlertView *alert1=[[AlertView alloc]init];
+       // AlertView *alert1=[[AlertView alloc]init];
         if ([[self ValidateCodeInfo]length]==0) {
             
             //        UIAlertView *alert2=[[UIAlertView alloc]initWithTitle:@"" message:@"" delegate:self cancelButtonTitle:@"NO,thanks" otherButtonTitles:@"OK", nil];
@@ -173,7 +178,12 @@
         }
         else
         {
-            [alert1 showStaticAlertWithTitle:@"" AndMessage:[self ValidateCodeInfo]];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[self ValidateCodeInfo] preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+            //[alert1 showStaticAlertWithTitle:@"" AndMessage:[self ValidateCodeInfo]];
         }
     }
    

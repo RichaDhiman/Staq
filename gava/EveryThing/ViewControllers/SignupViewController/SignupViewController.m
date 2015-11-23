@@ -98,7 +98,13 @@
     }
     else
     {
-        [alert showStaticAlertWithTitle:@"" AndMessage:[self ValidateSignupInfo]];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[self ValidateSignupInfo] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+
+       // [alert showStaticAlertWithTitle:@"" AndMessage:[self ValidateSignupInfo]];
     }
 }
 
