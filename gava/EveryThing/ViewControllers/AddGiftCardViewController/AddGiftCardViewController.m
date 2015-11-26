@@ -241,6 +241,7 @@
     [self.view endEditing:YES];
     self.mysearchBar.text=@"";
     [self getBrands:NO];
+    //[self BrandsInfo:YES];
 }
 
 

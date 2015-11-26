@@ -35,6 +35,8 @@ static char TAG_ACTIVITY_INDICATOR;
     
     if (!self.activityIndicator) {
         self.activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:nil];
+       // self.activityIndicator = [[UIActivityIndicatorView alloc]init];
+
         
         self.activityIndicator.color=[UIColor colorWithRed:23.0/255.0 green:198.0/255.0 blue:255.0/255.0 alpha:1.0];
         

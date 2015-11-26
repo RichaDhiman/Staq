@@ -27,6 +27,8 @@
 
 
 @interface FirstViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UIScrollViewDelegate>
+
+@property BOOL isAnim;
 @property (strong, nonatomic) IBOutlet UIImageView *img_logo;
 @property (strong, nonatomic) IBOutlet UICollectionView *myCollectionView;
 @property (strong, nonatomic) IBOutlet UIButton *btn_fbSignUp;

@@ -579,8 +579,6 @@
 
 -(void)deleteUser:(FamilyShareTableCell * )cell1
 {
-    
-    
     [self.view endEditing:YES];
     AppDelegate *App=(AppDelegate*)[UIApplication sharedApplication].delegate;
     AlertView *alert=[[AlertView alloc]init];

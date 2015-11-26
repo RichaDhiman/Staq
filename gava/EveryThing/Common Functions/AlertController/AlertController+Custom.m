@@ -88,23 +88,23 @@
 //    return alert;
 //}
 
-+(UIAlertController *)controllerWithTitle:(NSString *)title message:(NSString *)message buttons:(NSArray *)buttons style:(UIAlertControllerStyle)style success: (void (^) (NSString *response))success failure: (void (^) (NSString *error))failure{
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:style];
-    
-    for (int i=0; i<buttons.count-1; i++) {
-        NSString *str = [buttons objectAtIndex:i];
-        [alert addAction:[UIAlertAction actionWithTitle:str style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            success(action.title);
-        }]];
-    }
-    
-    [alert addAction:[UIAlertAction actionWithTitle:[buttons lastObject] style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        failure(action.title);
-    }]];
-    
-    return alert;
-}
+//+(UIAlertController *)controllerWithTitle:(NSString *)title message:(NSString *)message buttons:(NSArray *)buttons style:(UIAlertControllerStyle)style success: (void (^) (NSString *response))success failure: (void (^) (NSString *error))failure{
+//    
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:style];
+//    
+//    for (int i=0; i<buttons.count-1; i++) {
+//        NSString *str = [buttons objectAtIndex:i];
+//        [alert addAction:[UIAlertAction actionWithTitle:str style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//            success(action.title);
+//        }]];
+//    }
+//    
+//    [alert addAction:[UIAlertAction actionWithTitle:[buttons lastObject] style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+//        failure(action.title);
+//    }]];
+//    
+//    return alert;
+//}
 
 //+(UIAlertController *)alertWithTitle:(NSString *)title message:(NSString *)message buttons:(NSArray *)buttons TextField:(NSString *)placeholder success: (void (^) (NSString *response))success failure: (void (^) (NSString *error))failure{
 //    UIAlertController *alert = [UIAlertController controllerWithTitle:title message:message buttons:buttons style:UIAlertControllerStyleAlert success:^(NSString *response) {

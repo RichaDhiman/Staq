@@ -74,7 +74,7 @@
 -(void)Accessory_Donebtn_pressed:(UIButton*)btn
 {
     [self.view endEditing:YES];
-    AlertView *alert1=[[AlertView alloc]init];
+    //AlertView *alert1=[[AlertView alloc]init];
     if ([[self ValidateCodeInfo]length]==0) {
     
         [self SyncCard];

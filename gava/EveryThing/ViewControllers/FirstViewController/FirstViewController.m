@@ -9,18 +9,12 @@
 #import "FirstViewController.h"
 
 @interface FirstViewController ()
-/*!
- *  @brief  A array for images names
- */
-@property(nonatomic,retain)NSArray* imgsArr;
-/*!
- *  @brief A array for images titles
- */
-@property(nonatomic,retain)NSArray* titlesArr;
 
 @property(nonatomic)CGPoint scrollOffset;
 @property(nonatomic)BOOL reverseScroll;
 @property(nonatomic)BOOL alreadytrans;
+@property BOOL aniFirstTime;
+@property BOOL ani;
 @end
 
 @implementation FirstViewController
@@ -68,7 +62,7 @@
     self.myPageControl.currentPage=0;
     [self viewHelper];
     
-    [self settingUpTut];
+    //[self settingUpTut];
     
     
     
@@ -115,13 +109,6 @@
     self.btn_email.layer.borderWidth=1;
     self.btn_email.layer.borderColor=[[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.8] CGColor];
     //self.btn_email.layer.backgroundColor=[UIColor colorWithRed:<#(CGFloat)#> green:<#(CGFloat)#> blue:<#(CGFloat)#> alpha:<#(CGFloat)#>];
-    self.imgsArr=[[NSArray alloc]init];
-    self.titlesArr=[[NSArray alloc]init];
-    
-    self.imgsArr=@[@"logo_intro1",@"logo_intro2",@"logo_intro3"];
-    self.titlesArr=@[@"Store all your gift cards on your mobile device for easy accesss.",@"Find nearby retailers for cards that you have stored in Wallet.",@"Use your gift cards and make purchases right in the store from the Wallet app."];
-    
-    
 }
 
 
@@ -143,20 +130,24 @@
         
         FirstCell *cell = (FirstCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"FirstCell" forIndexPath:indexPath];
         cell.hasAnimated = NO;
+        
+        cell.cnst_firstimg_tr.constant=0;
+        cell.cnst_secimg_tr.constant=0;
+        cell.cnst_lastimg_tr.constant=0;
+        cell.cnst_firstimg_ld.constant=0;
+        cell.cnst_secimg_ld.constant=0;
+        cell.cnst_lastimg_ld.constant=0;
+
         [cell configureCell:@"target_front" :@"nike_slider" :@"walmart_slider" :@"Store all your gift cards on your mobile device for easy accesss."];
-        
-        
-        // [cell configureCell:@"card_new1" :@"Store all your gift cards on your mobile device for easy accesss."];
-        
         
         return cell;
     }
     else if(indexPath.section==1)
     {
-    
+        
         
         FamilyShareCell *cell = (FamilyShareCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"FamilyShareCell" forIndexPath:indexPath];
-              cell.hasAnimated = NO;
+        cell.hasAnimated = NO;
         
         [cell configureCell:@"person_1" :@"person_2" :@"person_3" :@"Socially share your gift cards with family and friends."];
         // cell.img_familyShare.transform=CGAffineTransformMakeTranslation(+cell.img_familyShare.frame.size.width+30,0);
@@ -169,7 +160,7 @@
     {
         imgCollectionCell *cell = (imgCollectionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"imgCollectionCell" forIndexPath:indexPath];
         
-         cell.hasAnimated = NO;
+        cell.hasAnimated = NO;
         [cell configureCell:@"map_slider-1" :@"map_popup-1" :@"Find nearby retailers for cards that you have stored in the Eventure wallet."];
         
         return cell;
@@ -180,7 +171,7 @@
         ThirdCellCollectionViewCell *cell = (ThirdCellCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"ThirdCellCollectionViewCell" forIndexPath:indexPath];
         
         
-         cell.hasAnimated = NO;
+        cell.hasAnimated = NO;
         [cell configureCell:@"target_slider" :@"Scanner_Line" :@"Use your gift cards and make purchases right in the store from the Eventure wallet."];
         
         return cell;
@@ -196,114 +187,218 @@
         FirstCell *cell1 = (FirstCell *)cell;
         
         
-            if (self.reverseScroll==YES) {
+        if (self.aniFirstTime==YES) {
             
+            self.aniFirstTime=NO;
             cell1.first_img.hidden=YES;
             cell1.Sec_img.hidden=YES;
             cell1.last_img.hidden=YES;
-            cell1.lbl_title.hidden=YES;
-            
-            if (self.alreadytrans==YES) {
-                self.alreadytrans=NO;
-            }
-            else
+        }
+      
+        
+         if(!self.isAnim)
             {
-                cell1.first_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
+            self.isAnim = YES;
+
+        
+        if (self.reverseScroll==YES) {
+            
+//            cell1.first_img.hidden=YES;
+//            cell1.Sec_img.hidden=YES;
+//            cell1.last_img.hidden=YES;
+            
+            cell1.lbl_title.hidden=NO;
+            
+//            if (self.alreadytrans==YES) {
+//                self.alreadytrans=NO;
+//            }
+//            else
+//            {
+//                cell1.first_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
                 cell1.Sec_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
                 cell1.last_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
-                cell1.lbl_title.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
-                
-            }
+               // cell1.lbl_title.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
+           
+//            }
             [UIView animateWithDuration:0.40
                                   delay:0.0
                                 options:UIViewAnimationOptionTransitionNone
                              animations:^{
                                  //first animation
-                                 cell1.first_img.transform=CGAffineTransformIdentity;
-                                 cell1.lbl_title.transform=CGAffineTransformIdentity;
+//                                 cell1.first_img.transform=CGAffineTransformIdentity;
+                                   //cell1.lbl_title.transform=CGAffineTransformIdentity;
+                                 
+                                 cell1.first_img.transform=CGAffineTransformMakeTranslation(+40, 0);
+                                 
                              }
-                             completion:nil];
+                             completion:^(BOOL finished) {
+                                 
+                                 [UIView animateWithDuration:0.40
+                                                       delay:0.0
+                                                     options:UIViewAnimationOptionTransitionNone
+                                                  animations:^{
+                                                      cell1.first_img.transform=CGAffineTransformIdentity;
+                                          }
+                                                  completion:nil];
+                            
+                          
+                             }];
             
+            
+           
+            
+            [UIView animateWithDuration:0.45 animations:^{
+                
+                cell1.Sec_img.transform=CGAffineTransformMakeTranslation(+40, 0);
+            } completion:^(BOOL finished) {
+                
+                
+                [UIView animateWithDuration:0.45
+                                      delay:0.0
+                                    options:UIViewAnimationOptionTransitionNone
+                                 animations:^{
+                                        cell1.Sec_img.transform=CGAffineTransformIdentity;
+                                 }
+                                 completion:nil];
+                
+
+             
+
+            }];
             
             [UIView animateWithDuration:0.50 animations:^{
-                cell1.Sec_img.transform=CGAffineTransformIdentity;
+                cell1.last_img.transform=CGAffineTransformMakeTranslation(+40, 0);
+            } completion:^(BOOL finished) {
+           
+                [UIView animateWithDuration:0.50
+                                      delay:0.0
+                                    options:UIViewAnimationOptionTransitionNone
+                                 animations:^{
+                                        cell1.last_img.transform=CGAffineTransformIdentity;
+                                 }
+                                 completion:nil];
+
+                
             }];
             
-            [UIView animateWithDuration:0.60 animations:^{
-                cell1.last_img.transform=CGAffineTransformIdentity;
-            }];
-            
+        
         }
         else
         {
+            self.aniFirstTime=YES;
             
             cell1.first_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
-            cell1.lbl_title.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
+            //cell1.lbl_title.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
             cell1.Sec_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
             cell1.last_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
             
+  
             
             [UIView animateWithDuration:0.40
                                   delay:0.0
                                 options:UIViewAnimationOptionTransitionNone
                              animations:^{
                                  //first animation
-                                 cell1.first_img.transform=CGAffineTransformIdentity;
-                                 cell1.lbl_title.transform=CGAffineTransformIdentity;
+                                // cell1.first_img.transform=CGAffineTransformIdentity;
+                                // cell1.lbl_title.transform=CGAffineTransformIdentity;
+                                 
+                                 cell1.first_img.transform=CGAffineTransformMakeTranslation(-40, 0);
+                     
+                                 
+                                 
                              }
-                             completion:nil];
+                             completion:^(BOOL finished) {
+                                 
+                                 [UIView animateWithDuration:0.40
+                                                       delay:0.0
+                                                     options:UIViewAnimationOptionTransitionNone
+                                                  animations:^{
+                                                      cell1.first_img.transform=CGAffineTransformIdentity;
+                                                  }
+                                                  completion:nil];
+                                 
+
+                                 
+
+                             }];
             
+            
+            [UIView animateWithDuration:0.45 animations:^{
+                
+                cell1.Sec_img.transform=CGAffineTransformMakeTranslation(-40, 0);
+            } completion:^(BOOL finished) {
+                
+                [UIView animateWithDuration:0.45
+                                      delay:0.0
+                                    options:UIViewAnimationOptionTransitionNone
+                                 animations:^{
+                                       cell1.Sec_img.transform=CGAffineTransformIdentity;                                 }
+                                 completion:nil];
+
+             
+                
+            }];
             
             [UIView animateWithDuration:0.50 animations:^{
-                cell1.Sec_img.transform=CGAffineTransformIdentity;
+                cell1.last_img.transform=CGAffineTransformMakeTranslation(-40, 0);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.50
+                                      delay:0.0
+                                    options:UIViewAnimationOptionTransitionNone
+                                 animations:^{
+                                     cell1.last_img.transform=CGAffineTransformIdentity;                              }
+                                 completion:nil];
+                
+
+                
+                
             }];
             
-            [UIView animateWithDuration:0.60 animations:^{
-                cell1.last_img.transform=CGAffineTransformIdentity;
-            }];
+
             
             
         }
         
     }
-        
+    }
+    
     
     else if(indexPath.section==1)
     {
         self.alreadytrans=NO;
         FamilyShareCell *cell2 = (FamilyShareCell*)cell;
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        FirstCell *cell5 = (FirstCell*)[self.myCollectionView cellForItemAtIndexPath:newIndexPath];
+       // NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+       // FirstCell *cell5 = (FirstCell*)[self.myCollectionView cellForItemAtIndexPath:newIndexPath];
         
         cell2.imgPer1.hidden=YES;
         cell2.imgPer2.hidden=YES;
         cell2.imgPer3.hidden=YES;
-        cell2.lbl_title.hidden=YES;
+        cell2.lbl_title.hidden=NO;
         
-        [UIView animateWithDuration:0.40
-                              delay:0.0
-                            options:UIViewAnimationOptionTransitionNone
-                         animations:^{
-                             //first animation
-                             
-                             cell5.first_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
-                             cell5.lbl_title.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
-                             
-                         }
-                         completion:nil];
-        
-        
-        [UIView animateWithDuration:0.50 animations:^{
-            cell5.Sec_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
-            
-            
-        }];
-        
-        [UIView animateWithDuration:0.60 animations:^{
-            cell5.last_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
-            
-            
-        }];
+//        [UIView animateWithDuration:0.40
+//                              delay:0.0
+//                            options:UIViewAnimationOptionTransitionNone
+//                         animations:^{
+//                             //first animation
+//                             
+//                             cell5.first_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
+//                            // cell5.lbl_title.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
+//                             
+//                         }
+//                         completion:nil];
+//        
+//        
+//        [UIView animateWithDuration:0.45 animations:^{
+//            cell5.Sec_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
+//            
+//            
+//        }];
+//        
+//        [UIView animateWithDuration:0.50 animations:^{
+//            cell5.last_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
+//            
+//            
+//        }];
         
         
         
@@ -350,89 +445,170 @@
     if([[[collectionView visibleCells] lastObject] isKindOfClass:[FirstCell class]])
     {
         FirstCell *cell1 = (FirstCell *)[[collectionView visibleCells] lastObject];
+        
+        
         cell1.first_img.hidden=NO;
         cell1.Sec_img.hidden=NO;
         cell1.last_img.hidden=NO;
         cell1.lbl_title.hidden=NO;
         
         
-        //        FirstCell *cell1 = (FirstCell *)cell;
-//        if(!cell1.hasAnimated)
-//        {
-//             cell1.hasAnimated = YES;
-            if (indexPath.section >indexPathVisi.section) {
+
+        if (indexPath.section >indexPathVisi.section) {
+            
+            self.aniFirstTime=YES;
+            if (self.ani==NO) {
                
-                if (self.alreadytrans==YES) {
-                    self.alreadytrans=NO;
-                }
-                else
-                {
-                    cell1.first_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
-                    cell1.Sec_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
-                    cell1.last_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
-                    cell1.lbl_title.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
-                    
-                }
-                [UIView animateWithDuration:0.40
-                                      delay:0.0
-                                    options:UIViewAnimationOptionTransitionNone
-                                 animations:^{
-                                     //first animation
-                                         cell1.lbl_title.transform=CGAffineTransformIdentity;
-                                        cell1.first_img.transform=CGAffineTransformIdentity;
-                                 }
-                                 completion:^(BOOL finished) {
-                                     
-                                                            }];
-                
-                
-                [UIView animateWithDuration:0.50 animations:^{
-                    cell1.Sec_img.transform=CGAffineTransformIdentity;
-                }];
-                
-                [UIView animateWithDuration:0.60 animations:^{
-                    cell1.last_img.transform=CGAffineTransformIdentity;
-                }];
-                
             }
             else
             {
                 
-                cell1.first_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
-                cell1.lbl_title.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
-                cell1.Sec_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
-                cell1.last_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
+                if(!cell1.hasAnimated)
+                {
+                    cell1.hasAnimated = YES;
+                    cell1.first_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
+                    cell1.Sec_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
+                    cell1.last_img.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
+                    // cell1.lbl_title.transform=CGAffineTransformMakeTranslation(-cell1.frame.size.width-30,0);
+                    
+                    //                             }
+                    [UIView animateWithDuration:0.40
+                                          delay:0.0
+                                        options:UIViewAnimationOptionTransitionNone
+                                     animations:^{
+                                         //first animation
+                                         // cell1.lbl_title.transform=CGAffineTransformIdentity;
+                                         //cell1.first_img.transform=CGAffineTransformIdentity;
+                                         
+                                         cell1.first_img.transform=CGAffineTransformMakeTranslation(+40, 0);
+                                     }
+                                     completion:^(BOOL finished) {
+                                         
+                                         
+                                         [UIView animateWithDuration:0.40
+                                                               delay:0.0
+                                                             options:UIViewAnimationOptionTransitionNone
+                                                          animations:^{
+                                                              cell1.first_img.transform=CGAffineTransformIdentity;                           }
+                                                          completion:nil];
+                                         
+                                         
+                                         
+                                         
+                                         
+                                     }];
+                    
+                    
+                    
+                    [UIView animateWithDuration:0.45 animations:^{
+                        
+                        cell1.Sec_img.transform=CGAffineTransformMakeTranslation(+40, 0);
+                    } completion:^(BOOL finished) {
+                        
+                        [UIView animateWithDuration:0.45
+                                              delay:0.0
+                                            options:UIViewAnimationOptionTransitionNone
+                                         animations:^{
+                                             cell1.Sec_img.transform=CGAffineTransformIdentity;                      }
+                                         completion:nil];
+                        
+                        
+                        
+                    }];
+                    
+                    [UIView animateWithDuration:0.50 animations:^{
+                        cell1.last_img.transform=CGAffineTransformMakeTranslation(+40, 0);
+                    } completion:^(BOOL finished) {
+                        [UIView animateWithDuration:0.50
+                                              delay:0.0
+                                            options:UIViewAnimationOptionTransitionNone
+                                         animations:^{
+                                             cell1.last_img.transform=CGAffineTransformIdentity;
+                                         }
+                                         completion:nil];
+                        
+                    }];
+
+            }
+            
+            
+        }
+        }
+        else
+        {
+            self.aniFirstTime=YES;
+            cell1.first_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
+            //cell1.lbl_title.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
+            cell1.Sec_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
+            cell1.last_img.transform=CGAffineTransformMakeTranslation(+cell1.frame.size.width+30,0);
+            
+
+            [UIView animateWithDuration:0.40
+                                  delay:0.0
+                                options:UIViewAnimationOptionTransitionNone
+                             animations:^{
+                                 //first animation
+                                // cell1.first_img.transform=CGAffineTransformIdentity;
+                                // cell1.lbl_title.transform=CGAffineTransformIdentity;
+                                 
+                                 cell1.first_img.transform=CGAffineTransformMakeTranslation(-40, 0);
+                             }
+                             completion:^(BOOL finished) {
+                                 [UIView animateWithDuration:0.40
+                                                       delay:0.0
+                                                     options:UIViewAnimationOptionTransitionNone
+                                                  animations:^{
+                                                        cell1.first_img.transform=CGAffineTransformIdentity;                   }
+                                                  completion:nil];
+                                 
+
+                               
+                                 
+                             }];
+
+            
+            
+            [UIView animateWithDuration:0.45 animations:^{
                 
+                cell1.Sec_img.transform=CGAffineTransformMakeTranslation(-40, 0);
+            } completion:^(BOOL finished) {
                 
-                [UIView animateWithDuration:0.40
+                [UIView animateWithDuration:0.45
                                       delay:0.0
                                     options:UIViewAnimationOptionTransitionNone
                                  animations:^{
-                                     //first animation
-                                     cell1.first_img.transform=CGAffineTransformIdentity;
-                                     cell1.lbl_title.transform=CGAffineTransformIdentity;
-                                 }
+                                     cell1.Sec_img.transform=CGAffineTransformIdentity;                 }
+                                 completion:nil];
+
+               
+                
+            }];
+            
+            [UIView animateWithDuration:0.50 animations:^{
+                cell1.last_img.transform=CGAffineTransformMakeTranslation(-40, 0);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.50
+                                      delay:0.0
+                                    options:UIViewAnimationOptionTransitionNone
+                                 animations:^{
+                                      cell1.last_img.transform=CGAffineTransformIdentity;               }
                                  completion:nil];
                 
-                
-                [UIView animateWithDuration:0.50 animations:^{
-                    cell1.Sec_img.transform=CGAffineTransformIdentity;
-                }];
-                
-                [UIView animateWithDuration:0.60 animations:^{
-                    cell1.last_img.transform=CGAffineTransformIdentity;
-                }];
-                
-                
-            }
+
+               
+            }];
             
-//        }
+            
+            
+        }
+        
+        //        }
         
     }
     else if([[[collectionView visibleCells] lastObject] isKindOfClass:[FamilyShareCell class]])
     {
-        
-        self.alreadytrans=NO;
+         self.ani=YES;
+//        self.alreadytrans=NO;
         FamilyShareCell *cell2 = (FamilyShareCell *)[[collectionView visibleCells] lastObject];
         
         cell2.imgPer1.hidden=NO;
@@ -441,98 +617,164 @@
         cell2.lbl_title.hidden=NO;
         
         
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        FirstCell *cell5 = (FirstCell*)[self.myCollectionView cellForItemAtIndexPath:newIndexPath];
-        
-         if(!cell2.hasAnimated)
-         {
-            cell2.hasAnimated = YES;
-             
-        if (indexPath.section >indexPathVisi.section) {
-            
-            cell2.imgPer2.transform=CGAffineTransformMakeTranslation(-cell2.frame.size.width,0);
-            cell2.imgPer1.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
-            cell2.imgPer3.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
-            cell2.lbl_title.transform=CGAffineTransformMakeTranslation(-cell2.frame.size.width, 0);
-            
-        }
-        else
+        if(!cell2.hasAnimated)
         {
-            cell2.imgPer2.transform=CGAffineTransformMakeTranslation(+cell2.frame.size.width,0);
-            cell2.imgPer1.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
-            cell2.imgPer3.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
-            cell2.lbl_title.transform=CGAffineTransformMakeTranslation(+cell2.frame.size.width, 0);
+            cell2.hasAnimated = YES;
             
-            self.alreadytrans=YES;
-            
-            [UIView animateWithDuration:0.50
-                                  delay:0.0
-                                options:UIViewAnimationOptionTransitionNone
-                             animations:^{
-                                 //first animation
-                                 
-                                 cell5.first_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
-                                 cell5.lbl_title.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
-                                 
-                             }
-                             completion:nil];
-            
-            
-            [UIView animateWithDuration:0.60 animations:^{
-                cell5.Sec_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
+            if (indexPath.section >indexPathVisi.section) {
+                
+                cell2.imgPer2.transform=CGAffineTransformMakeTranslation(-cell2.frame.size.width,0);
+                cell2.imgPer1.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
+                cell2.imgPer3.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
+              //  cell2.lbl_title.transform=CGAffineTransformMakeTranslation(-cell2.frame.size.width, 0);
                 
                 
-            }];
-            
-            [UIView animateWithDuration:0.70 animations:^{
-                cell5.last_img.transform=CGAffineTransformMakeTranslation(-cell5.frame.size.width-30,0);
+                [UIView animateWithDuration:0.30
+                                      delay:0.0
+                                    options:UIViewAnimationOptionTransitionNone
+                                 animations:^{
+                                     //first animation
+                                    
+                                     [UIView animateWithDuration:0.30
+                                                           delay:0.0
+                                                         options:UIViewAnimationOptionTransitionNone
+                                                      animations:^{
+                                                          cell2.imgPer2.transform=CGAffineTransformMakeTranslation(+40,0);
+                                                                                      }
+                                                      completion:^(BOOL finished) {
+                                                          
+                                                          [UIView animateWithDuration:0.30
+                                                                                delay:0.0
+                                                                              options:UIViewAnimationOptionTransitionNone
+                                                                           animations:^{
+                                                                                cell2.imgPer2.transform=CGAffineTransformIdentity;
+                                                                           }
+                                                                           completion:^(BOOL finished) {
+                                                                               
+                                                                               [UIView animateWithDuration:0.30
+                                                                                                     delay:0.0
+                                                                                                   options:UIViewAnimationOptionTransitionNone
+                                                                                                animations:^{
+                                                                                                    //second animation
+                                                                                                    cell2.imgPer1.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                                                                                                    
+                                                                                                }
+                                                                                                completion:^(BOOL finished){//and so on..
+                                                                                                    // cell2.imgPer1.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                                                                    [UIView animateWithDuration:0.30 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                                        cell2.imgPer1.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                                                                        //cell2.imgPer3.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                                                                                                        
+                                                                                                    } completion:nil];
+                                                                                                    
+                                                                                                }];
+                                                                               
+                                                                               [UIView animateWithDuration:0.30 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                   cell2.imgPer3.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                                                                                   
+                                                                               } completion:^(BOOL finished) {
+                                                                                   
+                                                                                   [UIView animateWithDuration:0.30 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                       cell2.imgPer3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                                                       
+                                                                                   } completion:nil];
+                                                                                   
+                                                                                   
+                                                                                   
+                                                                               }];
+
+                                                                               
+                                                                               
+                                                                           }];
+                                                      }];
+                                     
+
+                                     
+                                     
+                                 }
+                                 completion:^(BOOL finished){                                                                                                           }];
+                
+
+            }
+            else
+            {
+                cell2.imgPer2.transform=CGAffineTransformMakeTranslation(+cell2.frame.size.width,0);
+                cell2.imgPer1.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
+                cell2.imgPer3.transform=CGAffineTransformMakeScale(0.0f, 0.0f);
+               // cell2.lbl_title.transform=CGAffineTransformMakeTranslation(+cell2.frame.size.width, 0);
                 
                 
-            }];
-            
+                // Second Cell Animation
+
+                [UIView animateWithDuration:0.30
+                                      delay:0.0
+                                    options:UIViewAnimationOptionTransitionNone
+                                 animations:^{
+                                     //first animation
+                                     
+                                     [UIView animateWithDuration:0.30
+                                                           delay:0.0
+                                                         options:UIViewAnimationOptionTransitionNone
+                                                      animations:^{
+                                                          cell2.imgPer2.transform=CGAffineTransformMakeTranslation(-40,0);
+                                                      }
+                                                      completion:^(BOOL finished) {
+                                                          
+                                                          [UIView animateWithDuration:0.30
+                                                                                delay:0.0
+                                                                              options:UIViewAnimationOptionTransitionNone
+                                                                           animations:^{
+                                                                               cell2.imgPer2.transform=CGAffineTransformIdentity;
+                                                                           }
+                                                                           completion:^(BOOL finished) {
+                                                                               
+                                                                               [UIView animateWithDuration:0.30
+                                                                                                     delay:0.0
+                                                                                                   options:UIViewAnimationOptionTransitionNone
+                                                                                                animations:^{
+                                                                                                    //second animation
+                                                                                                    cell2.imgPer1.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                                                                                                    
+                                                                                                }
+                                                                                                completion:^(BOOL finished){//and so on..
+                                                                                                    // cell2.imgPer1.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                                                                    [UIView animateWithDuration:0.30 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                                        cell2.imgPer1.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                                                                        //cell2.imgPer3.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                                                                                                        
+                                                                                                    } completion:nil];
+                                                                                                    
+                                                                                                }];
+                                                                               [UIView animateWithDuration:0.30 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                   cell2.imgPer3.transform = CGAffineTransformMakeScale(1.1, 1.1);
+                                                                                   
+                                                                               } completion:^(BOOL finished) {
+                                                                                   
+                                                                                   [UIView animateWithDuration:0.30 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                       cell2.imgPer3.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                                                       
+                                                                                   } completion:nil];
+                                                                                   
+                                                                                   
+                                                                                   
+                                                                               }];
+
+                                                                               
+                                                                           }];
+                                                      }];
+                                     
+
+                                 }
+                                 completion:^(BOOL finished){                                                                                                          }];
+                
+
+                
+                
+            }
             
             
             
         }
-        
-        
-        [UIView animateWithDuration:0.30
-                              delay:0.0
-                            options:UIViewAnimationOptionTransitionNone
-                         animations:^{
-                             //first animation
-                             cell2.imgPer2.transform=CGAffineTransformIdentity;
-                             cell2.lbl_title.transform=CGAffineTransformIdentity;
-                         }
-                         completion:^(BOOL finished){[UIView animateWithDuration:0.30
-                                                                           delay:0.0
-                                                                         options:UIViewAnimationOptionTransitionNone
-                                                                      animations:^{
-                                                                          //second animation
-                                                                          cell2.imgPer1.transform = CGAffineTransformMakeScale(1.1, 1.1);
-                                                                          
-                                                                      }
-                                                                      completion:^(BOOL finished){//and so on..
-                                                                          cell2.imgPer1.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                                                          [UIView animateWithDuration:0.30 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
-                                                                              
-                                                                              //cell2.imgPer3.transform = CGAffineTransformMakeScale(1.1, 1.1);
-                                                                              
-                                                                          } completion:nil];
-                                                                          
-                                                                      }];
-                             
-                             [UIView animateWithDuration:0.30 delay:0.1 options:UIViewAnimationOptionTransitionNone animations:^{
-                                 cell2.imgPer3.transform = CGAffineTransformMakeScale(1.1, 1.1);
-                                 
-                             } completion:^(BOOL finished) {
-                                 cell2.imgPer3.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                 
-                             }];
-                         }];
-        
-        
-         }
     }
     else if ([[[collectionView visibleCells] lastObject] isKindOfClass:[imgCollectionCell class]])
     {
@@ -545,51 +787,51 @@
         if(!cell3.hasAnimated)
         {
             cell3.hasAnimated = YES;
-        
-        if (indexPath.section >indexPathVisi.section) {
-            //            cell3.img_logos.transform=CGAffineTransformMakeTranslation(-cell3.frame.size.width,0);
-            //            cell3.lbl_title.transform=CGAffineTransformMakeTranslation(-cell3.frame.size.width, 0);
-            cell3.img_popup.transform = CGAffineTransformMakeScale(0.0f, 0.0f);
             
-        }
-        else
-        {
-            //            cell3.img_logos.transform=CGAffineTransformMakeTranslation(+cell3.frame.size.width,0);
-            //            cell3.lbl_title.transform=CGAffineTransformMakeTranslation(+cell3.frame.size.width, 0);
-            cell3.img_popup.transform = CGAffineTransformMakeScale(0.0f, 0.0f);
+            if (indexPath.section >indexPathVisi.section) {
+                //            cell3.img_logos.transform=CGAffineTransformMakeTranslation(-cell3.frame.size.width,0);
+                //            cell3.lbl_title.transform=CGAffineTransformMakeTranslation(-cell3.frame.size.width, 0);
+                cell3.img_popup.transform = CGAffineTransformMakeScale(0.0f, 0.0f);
+                
+            }
+            else
+            {
+                //            cell3.img_logos.transform=CGAffineTransformMakeTranslation(+cell3.frame.size.width,0);
+                //            cell3.lbl_title.transform=CGAffineTransformMakeTranslation(+cell3.frame.size.width, 0);
+                cell3.img_popup.transform = CGAffineTransformMakeScale(0.0f, 0.0f);
+                
+            }
             
-        }
-        
-        [UIView animateWithDuration:0.60
-                              delay:0.0
-                            options:UIViewAnimationOptionTransitionNone
-                         animations:^{
-                             //first animation
-                             cell3.img_logos.transform=CGAffineTransformIdentity;
-                             cell3.lbl_title.transform=CGAffineTransformIdentity;
-                         }
-                         completion:^(BOOL finished){[UIView animateWithDuration:0.40
-                                                                           delay:0.0
-                                                                         options:UIViewAnimationOptionTransitionNone
-                                                                      animations:^{
-                                                                          //second animation
-                                                                          cell3.img_popup.transform = CGAffineTransformMakeScale(1.1, 1.1);
-                                                                          
-                                                                      }
-                                                                      completion:^(BOOL finished){//and so on..
-                                                                          [UIView animateWithDuration:0.20 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
-                                                                              cell3.img_popup.transform = CGAffineTransformMakeScale(1.0, 1.0);
+            [UIView animateWithDuration:0.60
+                                  delay:0.0
+                                options:UIViewAnimationOptionTransitionNone
+                             animations:^{
+                                 //first animation
+                                 cell3.img_logos.transform=CGAffineTransformIdentity;
+                                 cell3.lbl_title.transform=CGAffineTransformIdentity;
+                             }
+                             completion:^(BOOL finished){[UIView animateWithDuration:0.40
+                                                                               delay:0.0
+                                                                             options:UIViewAnimationOptionTransitionNone
+                                                                          animations:^{
+                                                                              //second animation
+                                                                              cell3.img_popup.transform = CGAffineTransformMakeScale(1.1, 1.1);
                                                                               
-                                                                          } completion:^(BOOL finished) {
-                                                                              //                                                                              cell3.img_popup.transform = CGAffineTransformMakeScale(0.0, 0.0);
-                                                                          }];
-                                                                          
-                                                                          
-                                                                      }];}];
-        
-        
-        
-    }
+                                                                          }
+                                                                          completion:^(BOOL finished){//and so on..
+                                                                              [UIView animateWithDuration:0.20 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                  cell3.img_popup.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                                                  
+                                                                              } completion:^(BOOL finished) {
+                                                                                  //                                                                              cell3.img_popup.transform = CGAffineTransformMakeScale(0.0, 0.0);
+                                                                              }];
+                                                                              
+                                                                              
+                                                                          }];}];
+            
+            
+            
+        }
     }
     
     else if([[[collectionView visibleCells] lastObject] isKindOfClass:[ThirdCellCollectionViewCell class]])
@@ -603,88 +845,85 @@
         if(!cell4.hasAnimated)
         {
             cell4.hasAnimated = YES;
-        
-        [cell4.lbl_first setText:@"2"];
-        [cell4.lbl_second setText:@"5"];
-        
-        cell4.img_scannerLine.hidden=YES;
-        
-        cell4.lbl_first.transform=CGAffineTransformIdentity;
-        cell4.lbl_second.transform=CGAffineTransformIdentity;
-        
-        
-        
-        [UIView animateWithDuration:4.0
-                              delay:1.0
-                            options:UIViewAnimationOptionTransitionNone
-                         animations:^{
-                             
-                         }
-                         completion:^(BOOL finished) {[UIView animateWithDuration:0.85
-                                                                            delay:0.0
-                                                                          options:UIViewAnimationOptionTransitionNone
-                                                                       animations:^{
-                                                                           //second animation
-                                                                           cell4.img_scannerLine.hidden=NO;
-                                                                           cell4.img_scannerLine.transform=CGAffineTransformMakeTranslation(0,+cell4.img_scannerLine.frame.size.height+10);
-                                                                           
-                                                                       }
-                                                                       completion:^(BOOL finished){//and so on..
-                                                                           
-                                                                           [UIView animateWithDuration:0.85 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+            
+            [cell4.lbl_first setText:@"2"];
+            [cell4.lbl_second setText:@"5"];
+            
+            cell4.img_scannerLine.hidden=YES;
+            
+            cell4.lbl_first.transform=CGAffineTransformIdentity;
+            cell4.lbl_second.transform=CGAffineTransformIdentity;
+            
+            
+            
+            [UIView animateWithDuration:4.0
+                                  delay:1.0
+                                options:UIViewAnimationOptionTransitionNone
+                             animations:^{
+                                 
+                             }
+                             completion:^(BOOL finished) {[UIView animateWithDuration:0.60
+                                                                                delay:0.0
+                                                                              options:UIViewAnimationOptionTransitionNone
+                                                                           animations:^{
+                                                                               //second animation
+                                                                               cell4.img_scannerLine.hidden=NO;
+                                                                               cell4.img_scannerLine.transform=CGAffineTransformMakeTranslation(0,+cell4.img_scannerLine.frame.size.height+10);
                                                                                
-                                                                               cell4.img_scannerLine.transform=CGAffineTransformIdentity;
-                                                                           } completion:^(BOOL finished) {
-                                                                               cell4.img_scannerLine.hidden=YES;
+                                                                           }
+                                                                           completion:^(BOOL finished){//and so on..
                                                                                
-                                                                               
-                                                                               
-                                                                               
-                                                                               [UIView animateWithDuration:0.85 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                               [UIView animateWithDuration:0.60 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
                                                                                    
-                                                                                   
-                                                                                   CATransition *animation = [CATransition animation];
-                                                                                   animation.startProgress = 0;
-                                                                                   animation.endProgress = 1.0;
-                                                                                   animation.duration = 1.0;
-                                                                                   
-                                                                                   animation.type=kCATransitionPush;
-                                                                                   animation.subtype = kCATransitionFromBottom;
-                                                                                   animation.delegate=self;
-                                                                                   
-                                                                                   [animation setValue:@"one" forKey:@"changeTextTransition"];
-                                                                                   animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
-                                                                                   
-                                                                                   
-                                                                                   [cell4.lbl_first.layer addAnimation:animation forKey:@"one"];
-                                                                                   
-                                                                                   
-                                                                                   // Change the text
-                                                                                   cell4.lbl_first.text = @"1";
-                                                                                   
-                                                                                   //
-                                                                                   
-                                                                                   
+                                                                                   cell4.img_scannerLine.transform=CGAffineTransformIdentity;
                                                                                } completion:^(BOOL finished) {
+                                                                                   cell4.img_scannerLine.hidden=YES;
+                                                                                   
+                                                                                   
+                                                                                   
+                                                                                   
+                                                                                   [UIView animateWithDuration:0.60 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+                                                                                       
+                                                                                       
+                                                                                       CATransition *animation = [CATransition animation];
+                                                                                       animation.startProgress = 0;
+                                                                                       animation.endProgress = 1.0;
+                                                                                       animation.duration = 1.0;
+                                                                                       
+                                                                                       animation.type=kCATransitionPush;
+                                                                                       animation.subtype = kCATransitionFromBottom;
+                                                                                       animation.delegate=self;
+                                                                                       
+                                                                                       [animation setValue:@"one" forKey:@"changeTextTransition"];
+                                                                                       animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
+                                                                                       
+                                                                                       
+                                                                                       [cell4.lbl_first.layer addAnimation:animation forKey:@"one"];
+                                                                                       
+                                                                                       
+                                                                                       // Change the text
+                                                                                       cell4.lbl_first.text = @"1";
+                                                                                       
+                                                                                       //
+                                                                                       
+                                                                                       
+                                                                                   } completion:^(BOOL finished) {
+                                                                                       
+                                                                                       
+                                                                                   }];
+                                                                                   
+                                                                                   
+                                                                                   [self  performSelector:@selector(animation2:) withObject:cell4 afterDelay:0.60];
                                                                                    
                                                                                    
                                                                                }];
                                                                                
                                                                                
-                                                                               [self  performSelector:@selector(animation2:) withObject:cell4 afterDelay:0.85];
                                                                                
-                                                                               
-                                                                           }];
-                                                                           
-                                                                           
-                                                                           
-                                                                       }];}];
+                                                                           }];}];
+        }
     }
-    }
-    else
-    {
-        
-    }
+    
 }
 
 
@@ -709,7 +948,7 @@
     
     CGPoint newOffset = scrollView.contentOffset;
     
-    if (newOffset.x < self.scrollOffset.x) {
+       if (newOffset.x < self.scrollOffset.x) {
         // scrolling to the left, reset offset
         //        [scrollView setContentOffset:offset];
         
@@ -721,16 +960,90 @@
         self.reverseScroll=NO;
     }
     
+    
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    FirstCell *cell5 = (FirstCell*)[self.myCollectionView cellForItemAtIndexPath:newIndexPath];
+    
+        if (self.myPageControl.currentPage==0) {
+        
+        if (newOffset.x < self.scrollOffset.x) {
+            // scrolling to the left, reset offset
+            //        [scrollView setContentOffset:offset];
+//            cell5.cnst_firstimg_ld.constant=newOffset.x;
+//            cell5.cnst_firstimg_tr.constant=newOffset.x;
+//            
+//            cell5.cnst_secimg_ld.constant=newOffset.x*2;
+//            cell5.cnst_secimg_tr.constant=newOffset.x*3;
+//            
+//            cell5.cnst_lastimg_ld.constant=newOffset.x*3;
+//            cell5.cnst_lastimg_tr.constant=newOffset.x*3;
+            
+            
+        }
+        else if(newOffset.x>self.scrollOffset.x)
+        {
+            //scrolling to the right
+            cell5.cnst_lastimg_ld.constant=-newOffset.x*0.4;
+            cell5.cnst_lastimg_tr.constant=newOffset.x*0.4;
+            
+            cell5.cnst_secimg_ld.constant=-newOffset.x*0.8;
+            cell5.cnst_secimg_tr.constant=newOffset.x*0.8;
+            
+            cell5.cnst_firstimg_ld.constant=-newOffset.x*1.2;
+            cell5.cnst_firstimg_tr.constant=newOffset.x*1.2;
+            
+           // cell5.first_img.transform=CGAffineTransformMakeTranslation(self.scrollOffset, 0);
+            
+
+        }
+
+    }
+    
 }
+
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if(!decelerate)
+    {
+        if([[self.myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] isKindOfClass:[FirstCell class]])
+        {
+            FirstCell *cell = (FirstCell*)[self.myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            cell.cnst_firstimg_tr.constant=0;
+            cell.cnst_secimg_tr.constant=0;
+            cell.cnst_lastimg_tr.constant=0;
+            cell.cnst_firstimg_ld.constant=0;
+            cell.cnst_secimg_ld.constant=0;
+            cell.cnst_lastimg_ld.constant=0;
+            [UIView animateWithDuration:0.25 animations:^{
+                [self.view layoutIfNeeded];
+            }];
+        }
+     
+    }
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if([[self.myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] isKindOfClass:[FirstCell class]])
+    {
+    FirstCell *cell = (FirstCell*)[self.myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    cell.cnst_firstimg_tr.constant=0;
+    cell.cnst_secimg_tr.constant=0;
+    cell.cnst_lastimg_tr.constant=0;
+    cell.cnst_firstimg_ld.constant=0;
+    cell.cnst_secimg_ld.constant=0;
+    cell.cnst_lastimg_ld.constant=0;
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }
+}
+
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     self.scrollOffset = scrollView.contentOffset;
     
     
-}
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    //self.scrollOffset = scrollView.contentOffset;
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView   // called on finger up as we are moving
@@ -1032,9 +1345,7 @@
 //
 //
 //}
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-}
+
 
 #pragma mark-Button Actions
 
