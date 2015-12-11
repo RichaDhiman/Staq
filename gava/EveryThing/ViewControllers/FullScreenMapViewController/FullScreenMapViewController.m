@@ -301,7 +301,6 @@ else
 //        url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=AIzaSyBY5AWF0BwMMD_oxmm1KHSvEZkAuQLAx0Q&keyword=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],self.BrandNames,self.BrandTypes,@"distance"];
         self.GoogleLocs=[[NSMutableArray alloc]init];
   
-        
         while (x<self.NamesArrayFromMain.count) {
             
             url=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%@,%@&key=%@&name=%@&types=%@&rankby=%@",[[NSUserDefaults standardUserDefaults]valueForKey:@"lat"], [[NSUserDefaults standardUserDefaults]valueForKey:@"lng"],ApiKey,[self.NamesArrayFromMain objectAtIndex:x],[self.TypesArrayFromMain objectAtIndex:x],@"distance"];
@@ -310,7 +309,6 @@ else
             
             [IOSRequest fetchJsonData:url success:^(NSDictionary *responseDict)
              {
-                
                  // self.GoogleLocs=[responseDict valueForKey:@"results"];
                  [self.GoogleLocs addObjectsFromArray:[responseDict valueForKey:@"results"]];
                  [self plotPositions:[responseDict valueForKey:@"results"]];
